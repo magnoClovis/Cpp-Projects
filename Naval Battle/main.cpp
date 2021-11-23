@@ -1,4 +1,6 @@
 #include <iostream>
+#include <string>
+#include "Boats.h"
 
 using namespace std;
 
@@ -53,9 +55,10 @@ void showBoard()
 
 }
 
-void gameBoard(int c) // This function is responsible to print the board on the screen, allowing the player to visualize the game board
+void gameBoard(int c) // This function is responsible to print the board on the screen during the game, allowing the player to visualize the game board
 {
     int i,j;
+    cout << "Welcome to Naval Battle!! First we are setting the position for each boat on the board!" << endl << endl;
     cout<<("     A   B   C   D   E   F   G   H   I   J");
     cout<<endl;
     for(i=0;i<10;i++){
@@ -95,6 +98,23 @@ void board(int a, int b, int c)
 
 int main()
 {
-    showBoard();
+    gameBoard(0);
+    cout << "Player 1, please follow the instructions to set the position for each boat." << endl;
+
+    Boats submarine, tug_ship, destroyer, cruiser, aircraft, none;
+    submarine.setSpaces("submarine");
+    tug_ship.setSpaces("tug ship");
+    destroyer.setSpaces("destroyer");
+    cruiser.setSpaces("cruiser");
+    aircraft.setSpaces("aircraft carrier");
+    none.setSpaces("none boat");
+
+    cout << "submarine spaces: " << submarine.spaces << endl;
+    cout << "tug ship spaces: " << tug_ship.spaces << endl;
+    cout << "destroyer spaces: " << destroyer.spaces << endl;
+    cout << "cruiser spaces: " << cruiser.spaces << endl;
+    cout << "aircraft carrier spaces: " << aircraft.spaces << endl;
+    cout << "none boat spaces: " << none.spaces << endl;
+
     return 0;
 }
