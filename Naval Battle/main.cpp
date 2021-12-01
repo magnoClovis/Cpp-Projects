@@ -1,5 +1,8 @@
 #include <iostream>
 #include <string>
+#include <stdlib.h>
+#include <stdio.h>
+
 #include "Boats.h"
 
 using namespace std;
@@ -96,10 +99,123 @@ void board(int a, int b, int c)
     gameBoard(c);
 }
 
+int getch()
+{
+    char ch;
+    ch = '\n';
+    while(ch=='\n')
+    {
+      ch = getchar();
+      if(ch=='\n')
+      {
+          printf("Type a valid value!");
+          ch = getchar();
+      }
+    }
+    while(getchar()!='\n');
+    return ch;
+}
+
+int positions(int *column, int *row) {
+        cout << "Type a COLUMN using a letter from A to J.\n";
+        *column = getch();
+        while(column<65||column>74&&(column<97||column>106))
+        {
+            cout << "Digite um valor válido!\n";
+            *column = getch();
+        }
+        cout << "Agora, digite a linha com números de '0' a '9'.\n";
+        *row = getch()-48;
+        if(column<97){
+            *column = column-65;
+        }else {
+            *column = column-97;
+        }
+
+
+        system("cls");
+}
+
+/*int repeat(a,b,c) // This function repeats the code if the user input some position that is not valid
+{
+      while(casas[b][a][c] == 'O')
+    {
+        printTab(c);
+        cout << "Choose a position that has not been choosen yet!!\n";
+        cout << "Type a COLUMN using a letter from A to J.\n";
+        a = getch();
+        while(a<65||a>74&&(a<97||a>106))
+        {
+            printf("Digite um valor válido!\n");
+            a = getch();
+        }
+        printf("Agora, digite a linha com números de '0' a '9'.\n");
+        b = getch()-48;
+        if(a<97){
+            a = a-65;
+        }else {
+            a = a-97;
+        }
+        system("cls");
+    }
+    tabuleiro(a,b,c);
+    return 0;
+}*/
+
+void submarino(int c) //This function is responsible to set the positions for the submarines
+{
+    int i, column, row;
+    int *pcolumn = &column, *prow = &row;
+    for(i=0;i<3;i++){
+        cout << "Total of submarines on the board: " << i << endl << endl;
+        cout << "SUBMARINES: You have three submarines! Each submarine occupies one space on the board.\n";
+        positions(pcolumn, prow);
+        //repeat(a,b,c);
+        cout << column << " " << row;
+    }
+
+}
+
+char SetPlayer1()
+{
+    int c;
+    char a;
+    c = 0;
+    submarino(c);
+    //rebocador(c);
+    //contra(c);
+    //cruzado(c);
+    //porta(c);
+    cout << "Perfect! All boats have been set!\n\n";
+    system("pause");
+    system("cls");
+    cout << "The game will be:\nA. Against a person\nB. Against the computer\n";
+    a = getch();
+    while(true)
+    {
+        if(a=='A'||a=='a')
+        {
+            return a;
+        }
+        if(a=='B'||a=='b')
+        {
+            return a;
+        } else
+        {
+            cout << "Input a valid option!!\n";
+            cout << "The game will be:\nA. Against a person\nB. Against the computer\n";
+            a = getch();
+        }
+    }
+
+
+}
+
 int main()
 {
     gameBoard(0);
     cout << "Player 1, please follow the instructions to set the position for each boat." << endl;
+    SetPlayer1();
 
     Boats submarine, tug_ship, destroyer, cruiser, aircraft, none;
     submarine.setSpaces("submarine");

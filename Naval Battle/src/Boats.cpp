@@ -11,6 +11,11 @@ Boats::boats(string type) {
     this->type = type;
 }
 
+/*
+Each boat occupies different spaces on the board.
+Here it is decided how many spaces each boat will occupy according to the name informed as a parameter
+*/
+
 int Boats::setSpaces(string type){
     if(type == "submarine"){
         return spaces = 1;
