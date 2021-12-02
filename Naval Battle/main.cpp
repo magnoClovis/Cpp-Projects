@@ -108,7 +108,7 @@ int getch()
       ch = getchar();
       if(ch=='\n')
       {
-          printf("Type a valid value!");
+          cout << "Type a valid value!";
           ch = getchar();
       }
     }
@@ -116,53 +116,38 @@ int getch()
     return ch;
 }
 
-int positions(int *column, int *row) {
+void positions(int *column, int *row) {
         cout << "Type a COLUMN using a letter from A to J.\n";
         *column = getch();
-        while(column<65||column>74&&(column<97||column>106))
+        while(*column<65||*column>74&&(*column<97||*column>106))
         {
-            cout << "Digite um valor válido!\n";
+            cout << "Input a valid option!!\n";;
             *column = getch();
         }
-        cout << "Agora, digite a linha com números de '0' a '9'.\n";
+        cout << "Now, input the ROW using numbers from '0' to '9'.\n";
         *row = getch()-48;
-        if(column<97){
-            *column = column-65;
+        if(*column<97){
+            *column = *column-65;
         }else {
-            *column = column-97;
+            *column = *column-97;
         }
-
-
         system("cls");
 }
 
-/*int repeat(a,b,c) // This function repeats the code if the user input some position that is not valid
+int repeat(int *column, int *row, int layer) // This function repeats the code if the user input some position that is not valid
 {
-      while(casas[b][a][c] == 'O')
+    while(spaces[*row][*column][layer] == 'O')
     {
-        printTab(c);
+        //printTab(layer);
         cout << "Choose a position that has not been choosen yet!!\n";
-        cout << "Type a COLUMN using a letter from A to J.\n";
-        a = getch();
-        while(a<65||a>74&&(a<97||a>106))
-        {
-            printf("Digite um valor válido!\n");
-            a = getch();
-        }
-        printf("Agora, digite a linha com números de '0' a '9'.\n");
-        b = getch()-48;
-        if(a<97){
-            a = a-65;
-        }else {
-            a = a-97;
-        }
+        positions(column, row); //Here in this function, column and row are already pointers, thats why it's not being passed pcolumn/ prow as arguments to "positions".
         system("cls");
     }
-    tabuleiro(a,b,c);
+    //tabuleiro(*column,*row,layer);
     return 0;
-}*/
+}
 
-void submarino(int c) //This function is responsible to set the positions for the submarines
+void submarine(int layer) //This function is responsible to set the positions for the submarines
 {
     int i, column, row;
     int *pcolumn = &column, *prow = &row;
@@ -170,18 +155,16 @@ void submarino(int c) //This function is responsible to set the positions for th
         cout << "Total of submarines on the board: " << i << endl << endl;
         cout << "SUBMARINES: You have three submarines! Each submarine occupies one space on the board.\n";
         positions(pcolumn, prow);
-        //repeat(a,b,c);
-        cout << column << " " << row;
+        repeat(pcolumn,prow,layer);
     }
 
 }
 
 char SetPlayer1()
 {
-    int c;
+    int layer = 0;
     char a;
-    c = 0;
-    submarino(c);
+    submarine(layer);
     //rebocador(c);
     //contra(c);
     //cruzado(c);
