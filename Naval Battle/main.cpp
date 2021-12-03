@@ -2,6 +2,11 @@
 #include <string>
 #include <stdlib.h>
 #include <stdio.h>
+#include <stdbool.h>
+#include <time.h>
+#include <conio.h>
+#include <windows.h>
+#include <math.h>
 
 #include "Boats.h"
 
@@ -135,8 +140,8 @@ void positions(int *column, int *row) { // In this function it is used pointers 
 }
 
 
-int repeat(int *column, int *row, int layer) // This function repeats the code if the user input some position that is not valid
-{
+int repeat(int *column, int *row, int layer){ // This function repeats the code if the user input some position that is not valid
+
     while(squares[*row][*column][layer] == 'O')
     {
         gameBoard(layer);
@@ -147,6 +152,52 @@ int repeat(int *column, int *row, int layer) // This function repeats the code i
     board(*column,*row,layer);
     return 0;
 }
+
+bool together(int *column, int *row, int layer){
+    bool horiz, vert;
+    if(squares[*row-1][*column][layer]==79||squares[*row+1][*column][layer]==79){
+        system("cls");
+        repeat(column,row,layer);
+        return horiz = true;
+    } else if(squares[*row][*column+1][layer]==79||squares[*row][*column-1][layer]==79){
+        system("cls");
+        repeat(column,row,layer);
+        return vert = true;
+    } else {return false;}
+}
+
+void clearBoard(int column, int row, int layer) {
+
+    int i, j;
+
+    squares[row][column][layer] = 0;
+
+    printf("     A   B   C   D   E   F   G   H   I   J");
+
+    printf("\n");
+    for(i=0;i<10;i++){
+        j=0;
+        while(j<10) {
+        if (j==0&&i<=9&&squares[i][j][layer]==79){
+        printf(" %d | %c |",i,squares[i][j][layer]);
+        }
+        else if(j==0&&i<=9){
+            printf(" %d |___|",i);
+        }
+        else{
+                if(squares[i][j][layer]==79){
+                   printf(" %c |",squares[i][j][layer]);
+                }
+        else{
+            printf("___|");
+        }
+        }
+        j++;
+       }
+       printf("\n\n");
+    }
+}
+
 
 void submarine(int layer, int quantity, int length) //This function is responsible to set the positions for the submarines
 {
@@ -161,12 +212,41 @@ void submarine(int layer, int quantity, int length) //This function is responsib
 
 }
 
+void tugShip(int layer, int quantity, int length)
+{
+    int i, j, column, row;
+    int *pcolumn = &column, *prow = &row;
+    bool verif;
+    j=0;
+    while(j<quantity){
+            for(i=0;i<length;i++){
+                cout << "Total of Tug Ships on the board: " << j << endl << endl;
+                cout << "Tug Ship: You have " << quantity << " tug ships! Each tug ship occupies " << length << " squares on the board.\n";
+
+                positions(pcolumn, prow);
+                repeat(pcolumn,prow,layer);
+
+                if(i!=0){
+                    verif = together(pcolumn,prow,layer);
+                }
+                while(verif == 0) {
+                    system("cls");
+                    clearBoard(column,row,layer);
+                    cout << "---------INVALID POSITION---------\nInput a position close to the last one.\n";
+                    positions(pcolumn, prow);
+                    verif = together(pcolumn,prow,layer);
+                }
+            }
+            j++;
+    }
+}
+
 char SetPlayer1(int quantity, int length) // This functions stands for letting the Player 1 set all the boats on the board
 {
     int layer = 0;
     char a;
-    submarine(layer, quantity, length);
-    //rebocador(c);
+    //submarine(layer, quantity, length);
+    tugShip(layer, quantity, length);
     //contra(c);
     //cruzado(c);
     //porta(c);
@@ -203,13 +283,14 @@ int main()
     submarine.setQtt(submarine.length);
 
     tug_ship.setLength("tug ship");
+    tug_ship.setQtt(tug_ship.length);
 
     destroyer.setLength("destroyer");
     cruiser.setLength("cruiser");
     aircraft.setLength("aircraft carrier");
     none.setLength("none boat");
 
-    SetPlayer1(submarine.quantity, submarine.length);
+    SetPlayer1(tug_ship.quantity, tug_ship.length);
 
     cout << "submarine length: " << submarine.length << endl;
     cout << "tug ship length: " << tug_ship.length << endl;
