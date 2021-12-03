@@ -152,17 +152,19 @@ int repeat(int *column, int *row, int layer){ // This function repeats the code 
     board(*column,*row,layer);
     return 0;
 }
-
+// I NEED TO CREATE CONDITIONALS FOR VERTICALS AND HORIZONTALS, IT'LL PROBABLY BE A NEW FUN APART FROM "TOGETHER"
 bool together(int *column, int *row, int layer){
     bool horiz, vert;
     if(squares[*row-1][*column][layer]==79||squares[*row+1][*column][layer]==79){
         system("cls");
         repeat(column,row,layer);
-        return horiz = true;
-    } else if(squares[*row][*column+1][layer]==79||squares[*row][*column-1][layer]==79){
+        horiz = true;
+        return horiz;
+    } else if(squares[*row][*column-1][layer]==79||squares[*row][*column+1][layer]==79){
         system("cls");
         repeat(column,row,layer);
-        return vert = true;
+        vert = true;
+        return vert;
     } else {return false;}
 }
 
@@ -218,10 +220,11 @@ void tugShip(int layer, int quantity, int length)
     int *pcolumn = &column, *prow = &row;
     bool verif;
     j=0;
+    verif = 1;
     while(j<quantity){
             for(i=0;i<length;i++){
                 cout << "Total of Tug Ships on the board: " << j << endl << endl;
-                cout << "Tug Ship: You have " << quantity << " tug ships! Each tug ship occupies " << length << " squares on the board.\n";
+                cout << "TUG SHIP: You have " << quantity << " tug ships! Each tug ship occupies " << length << " squares on the board.\n";
 
                 positions(pcolumn, prow);
                 repeat(pcolumn,prow,layer);
@@ -241,13 +244,45 @@ void tugShip(int layer, int quantity, int length)
     }
 }
 
+void destroyer(int layer, int quantity, int length) {
+    int i, j, column, row;
+    int *pcolumn = &column, *prow = &row;
+    bool verif;
+    j=0;
+    verif = 1;
+    while(j<quantity){
+        for(i=0;i<length;i++){
+            cout << "Total of Destroyers on the board: " << j << endl << endl;
+            cout << "DESTROYER: You have " << quantity << " destroyer! The destroyer occupies " << length << " squares on the board.\n";
+
+            positions(pcolumn, prow);
+
+            if(i==0){
+                repeat(pcolumn,prow,layer);
+            } else {
+                verif = together(pcolumn,prow,layer);
+            }
+
+            while(verif == 0) {
+                system("cls");
+                clearBoard(column,row,layer);
+                cout << "---------INVALID POSITION---------\nInput a position close to the last one.\n";
+                positions(pcolumn, prow);
+                verif = together(pcolumn,prow,layer);
+            }
+        }
+        j++;
+    }
+
+}
+
 char SetPlayer1(int quantity, int length) // This functions stands for letting the Player 1 set all the boats on the board
 {
     int layer = 0;
     char a;
     //submarine(layer, quantity, length);
-    tugShip(layer, quantity, length);
-    //contra(c);
+    //tugShip(layer, quantity, length);
+    destroyer(layer, quantity, length);
     //cruzado(c);
     //porta(c);
     cout << "Perfect! All boats have been set!\n\n";
@@ -286,11 +321,13 @@ int main()
     tug_ship.setQtt(tug_ship.length);
 
     destroyer.setLength("destroyer");
+    destroyer.setQtt(destroyer.length);
+
     cruiser.setLength("cruiser");
     aircraft.setLength("aircraft carrier");
     none.setLength("none boat");
 
-    SetPlayer1(tug_ship.quantity, tug_ship.length);
+    SetPlayer1(destroyer.quantity, destroyer.length);
 
     cout << "submarine length: " << submarine.length << endl;
     cout << "tug ship length: " << tug_ship.length << endl;
