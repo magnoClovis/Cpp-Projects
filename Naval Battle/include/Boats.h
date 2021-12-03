@@ -7,10 +7,11 @@ class Boats
 {
     public:
         Boats();
+        int length; int quantity;
         boats(string type);
-        int setSpaces(string type);
+        int setLength(string type);
         virtual ~Boats();
-        int spaces;
+        int setQtt(int length);
     protected:
 
     private:

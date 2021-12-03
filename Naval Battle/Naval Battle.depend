@@ -1,13 +1,15 @@
 # depslib dependency file v1.0
-1637690099 source:d:\clovi\estudos\repositórios\cpp-projects\naval battle\main.cpp
+1638474510 source:d:\clovi\estudos\repositórios\cpp-projects\naval battle\main.cpp
 	<iostream>
 	<string>
+	<stdlib.h>
+	<stdio.h>
 	"Boats.h"
 
-1637688832 d:\clovi\estudos\repositórios\cpp-projects\naval battle\include\boats.h
+1638471026 d:\clovi\estudos\repositórios\cpp-projects\naval battle\include\boats.h
 	<string>
 
-1637708475 source:d:\clovi\estudos\repositórios\cpp-projects\naval battle\src\boats.cpp
+1638471184 source:d:\clovi\estudos\repositórios\cpp-projects\naval battle\src\boats.cpp
 	"Boats.h"
 	<string>
 

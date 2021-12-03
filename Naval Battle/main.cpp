@@ -7,7 +7,7 @@
 
 using namespace std;
 
-char spaces[10][10][2];
+char squares[10][10][2];
 
 void matrix()
 {
@@ -21,12 +21,12 @@ void matrix()
             for(i=0;i<10;i++){
             j=0;
                while(j<10) {
-                    spaces[i][j][c] = 48; // 48 == 0(zero) in ASCII table
-                    if(spaces[i][j][c] == 48){
-                    cout << spaces[i][j][c] << " ";
+                    squares[i][j][c] = 48; // 48 == 0(zero) in ASCII table
+                    if(squares[i][j][c] == 48){
+                    cout << squares[i][j][c] << " ";
                     }
                     else{
-                        cout<< spaces[i][j][c] << " ";
+                        cout<< squares[i][j][c] << " ";
                     }
                     j++;
                }
@@ -68,17 +68,17 @@ void gameBoard(int c) // This function is responsible to print the board on the 
             j=0;
             while(j<10) {
                 /* The conditions below are used for a better visual representation.
-                The differences between them are just the number of spaces used on each "cout<<"
+                The differences between them are just the number of squares used on each "cout<<"
                 statement, so everything on the display will be symmetrical.*/
-                if (j==0&&i<=9&&spaces[i][j][c]=='O'){
-                    cout<< i << " | " << spaces[i][j][c] << " |";
+                if (j==0&&i<=9&&squares[i][j][c]=='O'){
+                    cout<< i << " | " << squares[i][j][c] << " |";
                 }
                 else if(j==0&&i<=9){
                     cout<< " " << i <<" |___|";
                 }
                 else{
-                    if(spaces[i][j][c]=='O'){
-                        cout<< " " << spaces[i][j][c] << " |";
+                    if(squares[i][j][c]=='O'){
+                        cout<< " " << squares[i][j][c] << " |";
                     }
                 else{
                     cout<<("___|");
@@ -90,13 +90,13 @@ void gameBoard(int c) // This function is responsible to print the board on the 
     }
 }
 
-void board(int a, int b, int c)
+void board(int column, int row, int layer)
 {
-    // This function changes an element on the matrix "spaces" and show what the changes did on the board
+    // This function changes an element on the matrix "squares" and show what the changes did on the board
     int i,j; // Again, 'i' represents the rows and 'j' the columns
 
-    spaces[b][a][c] = 'O'; // 'b' represents the rows and 'a' the columns
-    gameBoard(c);
+    squares[row][column][layer] = 'O';
+    gameBoard(layer);
 }
 
 int getch()
@@ -116,10 +116,10 @@ int getch()
     return ch;
 }
 
-void positions(int *column, int *row) {
+void positions(int *column, int *row) { // In this function it is used pointers to modify the values of rows and columns
         cout << "Type a COLUMN using a letter from A to J.\n";
         *column = getch();
-        while(*column<65||*column>74&&(*column<97||*column>106))
+        while(*column<65||*column>74&&(*column<97||*column>106)) // Verifies if the input is a letter between A and J
         {
             cout << "Input a valid option!!\n";;
             *column = getch();
@@ -134,37 +134,38 @@ void positions(int *column, int *row) {
         system("cls");
 }
 
+
 int repeat(int *column, int *row, int layer) // This function repeats the code if the user input some position that is not valid
 {
-    while(spaces[*row][*column][layer] == 'O')
+    while(squares[*row][*column][layer] == 'O')
     {
-        //printTab(layer);
+        gameBoard(layer);
         cout << "Choose a position that has not been choosen yet!!\n";
         positions(column, row); //Here in this function, column and row are already pointers, thats why it's not being passed pcolumn/ prow as arguments to "positions".
         system("cls");
     }
-    //tabuleiro(*column,*row,layer);
+    board(*column,*row,layer);
     return 0;
 }
 
-void submarine(int layer) //This function is responsible to set the positions for the submarines
+void submarine(int layer, int quantity, int length) //This function is responsible to set the positions for the submarines
 {
     int i, column, row;
     int *pcolumn = &column, *prow = &row;
-    for(i=0;i<3;i++){
+    for(i=0;i<quantity;i++){
         cout << "Total of submarines on the board: " << i << endl << endl;
-        cout << "SUBMARINES: You have three submarines! Each submarine occupies one space on the board.\n";
+        cout << "SUBMARINES: You have " << quantity << " submarines! Each submarine occupies " << length << " square on the board.\n";
         positions(pcolumn, prow);
         repeat(pcolumn,prow,layer);
     }
 
 }
 
-char SetPlayer1()
+char SetPlayer1(int quantity, int length) // This functions stands for letting the Player 1 set all the boats on the board
 {
     int layer = 0;
     char a;
-    submarine(layer);
+    submarine(layer, quantity, length);
     //rebocador(c);
     //contra(c);
     //cruzado(c);
@@ -190,30 +191,32 @@ char SetPlayer1()
             a = getch();
         }
     }
-
-
 }
 
 int main()
 {
     gameBoard(0);
     cout << "Player 1, please follow the instructions to set the position for each boat." << endl;
-    SetPlayer1();
 
     Boats submarine, tug_ship, destroyer, cruiser, aircraft, none;
-    submarine.setSpaces("submarine");
-    tug_ship.setSpaces("tug ship");
-    destroyer.setSpaces("destroyer");
-    cruiser.setSpaces("cruiser");
-    aircraft.setSpaces("aircraft carrier");
-    none.setSpaces("none boat");
+    submarine.setLength("submarine");
+    submarine.setQtt(submarine.length);
 
-    cout << "submarine spaces: " << submarine.spaces << endl;
-    cout << "tug ship spaces: " << tug_ship.spaces << endl;
-    cout << "destroyer spaces: " << destroyer.spaces << endl;
-    cout << "cruiser spaces: " << cruiser.spaces << endl;
-    cout << "aircraft carrier spaces: " << aircraft.spaces << endl;
-    cout << "none boat spaces: " << none.spaces << endl;
+    tug_ship.setLength("tug ship");
+
+    destroyer.setLength("destroyer");
+    cruiser.setLength("cruiser");
+    aircraft.setLength("aircraft carrier");
+    none.setLength("none boat");
+
+    SetPlayer1(submarine.quantity, submarine.length);
+
+    cout << "submarine length: " << submarine.length << endl;
+    cout << "tug ship length: " << tug_ship.length << endl;
+    cout << "destroyer length: " << destroyer.length << endl;
+    cout << "cruiser length: " << cruiser.length << endl;
+    cout << "aircraft carrier length: " << aircraft.length << endl;
+    cout << "none boat length: " << none.length << endl;
 
     return 0;
 }
