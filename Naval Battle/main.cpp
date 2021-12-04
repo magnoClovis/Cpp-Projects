@@ -229,9 +229,12 @@ void tugShip(int layer, int quantity, int length)
                 positions(pcolumn, prow);
                 repeat(pcolumn,prow,layer);
 
-                if(i!=0){
+                if(i==0){
+                    repeat(pcolumn,prow,layer);
+                } else {
                     verif = together(pcolumn,prow,layer);
                 }
+
                 while(verif == 0) {
                     system("cls");
                     clearBoard(column,row,layer);
