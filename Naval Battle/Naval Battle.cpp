@@ -9,36 +9,31 @@
 #include <math.h>
 
 #include "Boats.h"
+//#include "source.h"
 
 using namespace std;
 
-char squares[10][10][2];
+char g_squares[10][10][2];
 
 void matrix()
 {
     // This function is responsible to generate and print a matrix full of zeros.
     // This matrix will be used to record the boats and ships positions for the game.
     int i, j, c; // 'i' represents the lines and 'j' the columns.
-
     for (c = 0; c < 2; c++) {
         if (c == 1) { cout << ("\n"); }
 
         for (i = 0; i < 10; i++) {
             j = 0;
             while (j < 10) {
-                squares[i][j][c] = 48; // 48 == 0(zero) in ASCII table
-                if (squares[i][j][c] == 48) {
-                    cout << squares[i][j][c] << " ";
-                }
-                else {
-                    cout << squares[i][j][c] << " ";
-                }
+                g_squares[i][j][c] = 48; // 48 == 0(zero) in ASCII table
+                //cout << g_squares[i][j][c] << " "; // if for some reason it's necessary to take a look at the matrix of zeros, then uncomment this line and the othes cout below
                 j++;
             }
-            cout << endl;
+            //cout << endl;
         }
     }
-    cout << endl;
+   //cout << endl;
 }
 
 void showBoard()
@@ -75,15 +70,15 @@ void gameBoard(int c) // This function is responsible to print the board on the 
             /* The conditions below are used for a better visual representation.
             The differences between them are just the number of squares used on each "cout<<"
             statement, so everything on the display will be symmetrical.*/
-            if (j == 0 && i <= 9 && squares[i][j][c] == 'O') {
-                cout << i << " | " << squares[i][j][c] << " |";
+            if (j == 0 && i <= 9 && g_squares[i][j][c] == 'O') {
+                cout << i << " | " << g_squares[i][j][c] << " |";
             }
             else if (j == 0 && i <= 9) {
                 cout << " " << i << " |___|";
             }
             else {
-                if (squares[i][j][c] == 'O') {
-                    cout << " " << squares[i][j][c] << " |";
+                if (g_squares[i][j][c] == 'O') {
+                    cout << " " << g_squares[i][j][c] << " |";
                 }
                 else {
                     cout << ("___|");
@@ -100,7 +95,7 @@ void board(int column, int row, int layer)
     // This function changes an element on the matrix "squares" and show what the changes did on the board
     int i, j; // Again, 'i' represents the rows and 'j' the columns
 
-    squares[row][column][layer] = 'O';
+    g_squares[row][column][layer] = 'O';
     gameBoard(layer);
 }
 
@@ -140,38 +135,36 @@ void positions(int* column, int* row) { // In this function it is used pointers 
     system("cls");
 }
 
-
 int repeat(int* column, int* row, int layer) { // This function repeats the code if the user input some position that is not valid
 
     bool repeated;
     repeated = false;
-    while (squares[*row][*column][layer] == 'O') // Verifies if the space is already filled
+    while (g_squares[*row][*column][layer] == 79) // Verifies if the space is already filled with the letter 'O' (79 in ASCII)
     {
         gameBoard(layer);
         cout << "Choose a position that has not been choosen yet!!\n";
         positions(column, row); //Here in this function, column and row are already pointers, thats why it's not being passed pcolumn/ prow as arguments to "positions".
         system("cls");
-        repeated = true;
     }
     board(*column, *row, layer);
     return repeated;
 }
 
-// I NEED TO CREATE CONDITIONALS FOR VERTICALS AND HORIZONTALS, IT'LL PROBABLY BE A NEW FUNCTION APART FROM "TOGETHER"
-bool together(int* column, int* row, int layer, bool* prepeated) {
-    bool horiz, vert;
 
-    if (squares[*row - 1][*column][layer] == 79 || squares[*row + 1][*column][layer] == 79) { // verifies continuity in horizontal
-        system("cls");
-        repeat(column, row, layer);
-        horiz = true;
-        return horiz;
-    }
-    else if (squares[*row][*column - 1][layer] == 79 || squares[*row][*column + 1][layer] == 79) { // verifies continuity in vertical
-        system("cls");
-        repeat(column, row, layer);
+bool vertical(int* column, int* row, int layer) {
+    bool vert = 0;
+    if (g_squares[*row - 1][*column][layer] == 79 || g_squares[*row + 1][*column][layer] == 79) { // verifies continuity in vertica
         vert = true;
         return vert;
+    }
+    else { return false;  }
+}
+
+bool horizontal(int* column, int* row, int layer) {
+    bool horiz = 0;
+    if (g_squares[*row][*column - 1][layer] == 79 || g_squares[*row][*column + 1][layer] == 79) { // verifies continuity in horizontal
+        horiz = true;
+        return horiz;
     }
     else { return false; }
 }
@@ -180,22 +173,22 @@ void clearBoard(int column, int row, int layer) {
 
     int i, j;
 
-    squares[row][column][layer] = 0; // clear the space by setting its value to zero
+    g_squares[row][column][layer] = 0; // clear the space by setting its value to zero
 
     cout << "     A   B   C   D   E   F   G   H   I   J" << endl;
 
     for (i = 0; i < 10; i++) { // shows the board
         j = 0;
         while (j < 10) {
-            if (j == 0 && i <= 9 && squares[i][j][layer] == 79) {
-                cout << " " << i << " | " << squares[i][j][layer] << " |";
+            if (j == 0 && i <= 9 && g_squares[i][j][layer] == 79) {
+                cout << " " << i << " | " << g_squares[i][j][layer] << " |";
             }
             else if (j == 0 && i <= 9) {
                 cout << " " << i << " |___|";
             }
             else {
-                if (squares[i][j][layer] == 79) {
-                    cout << " " << squares[i][j][layer] << " |";
+                if (g_squares[i][j][layer] == 79) {
+                    cout << " " << g_squares[i][j][layer] << " |";
                 }
                 else {
                     cout << "___|";
@@ -206,7 +199,6 @@ void clearBoard(int column, int row, int layer) {
         cout << "\n\n";
     }
 }
-
 
 void submarine(int layer, int quantity, int length) //This function is responsible to set the positions for the submarines
 {
@@ -225,11 +217,10 @@ void tugShip(int layer, int quantity, int length)
 {
     int i, j, column, row;
     int* pcolumn = &column, * prow = &row;
-    bool verif, repeated;
+    bool repeated, horiz, vert;
     bool* prepeated = &repeated;
     j = 0;
-    verif = 1;
-    repeated = 1;
+    horiz = 0, vert = 0, repeated = 1;
     while (j < quantity) {
         for (i = 0; i < length; i++) {
             cout << "Total of Tug Ships on the board: " << j << endl << endl;
@@ -238,33 +229,35 @@ void tugShip(int layer, int quantity, int length)
             positions(pcolumn, prow);
             repeated = repeat(pcolumn, prow, layer);
 
-            if (i == 0) {
-                repeated = repeat(pcolumn, prow, layer);
-            }
-            else {
-                verif = together(pcolumn, prow, layer, prepeated);
-            }
+            if (i == 1) {
+                horiz = horizontal(pcolumn, prow, layer);
+                vert = vertical(pcolumn, prow, layer);
 
-            while (verif == 0) {
+                while (horiz == 0 && vert == 0) {
+                    system("cls");
+                    clearBoard(column, row, layer);
+                    cout << "---------INVALID POSITION---------\nInput a position close to the last one.\n";
+                    positions(pcolumn, prow);
+                    repeated = repeat(pcolumn, prow, layer);
+                    horiz = horizontal(pcolumn, prow, layer);
+                    vert = vertical(pcolumn, prow, layer);
+                }
                 system("cls");
-                clearBoard(column, row, layer);
-                cout << "---------INVALID POSITION---------\nInput a position close to the last one.\n";
-                positions(pcolumn, prow);
-                verif = together(pcolumn, prow, layer, prepeated);
+                board(column, row, layer);
             }
         }
         j++;
     }
 }
 
-void destroyer(int layer, int quantity, int length) {
+void destroyer(int layer, int quantity, int length) { // Sets the destroyer on the board
     int i, j, column, row;
-    int* pcolumn = &column, * prow = &row;
-    bool verif, repeated;
+    int* pcolumn = &column, *prow = &row;
+    bool repeated, horiz, vert;
     bool* prepeated = &repeated;
     j = 0;
-    verif = 1;
-    repeated = 0;
+    horiz = 0, vert = 0, repeated = 1; // 0 for false and 1 for true
+
     while (j < quantity) {
         for (i = 0; i < length; i++) {
 
@@ -272,32 +265,60 @@ void destroyer(int layer, int quantity, int length) {
             cout << "DESTROYER: You have " << quantity << " destroyer! The destroyer occupies " << length << " squares on the board.\n";
 
             positions(pcolumn, prow);
-
             if (i == 0) {
-                repeated = repeat(pcolumn, prow, layer);
+                repeated = repeat(pcolumn, prow, layer); // checking only repetitions, no need to check continuity at the first iteration
             }
+            // this 'else if' block can be transformed into a function
             else if (i == 1) {
+                repeated = repeat(pcolumn, prow, layer); // check repetition
+                if (repeated == 0) { // then check continuity and identify the axis
+                    horiz = horizontal(pcolumn, prow, layer); // horiz will be equal to 1 if the boat is horizontal on the board
+                    vert = vertical(pcolumn, prow, layer); // vert will be equal to 1 if the boat is vertical on the board
+
+                    while (horiz == 0 && vert == 0){ // while both horiz and vert are equal to 0, it indicates that the boat isn't either in horizontal or vertical...
+                        system("cls");               // ...in other words, there's no continuity   
+                        clearBoard(column, row, layer); // erase the last square informed, since this position is invalid
+                        cout << "---------INVALID POSITION---------\nInput a position close to the last one.\n";
+                        positions(pcolumn, prow); // gets another position
+                        repeated = repeat(pcolumn, prow, layer);
+                        horiz = horizontal(pcolumn, prow, layer); // checks continuity on horizontal again
+                        vert = vertical(pcolumn, prow, layer); // checks continuity on vertical again
+                    }
+                    system("cls");
+                    board(column, row, layer); // if everything is ok, then set the position on the board and then show it on the screen.
+                }
+            }
+
+            // This last block can also be transformed into another function
+            else { // after the second loop
                 repeated = repeat(pcolumn, prow, layer);
-            }
-            else if (i == 1 && repeated == 0) {
-                verif = together(pcolumn, prow, layer, prepeated);
-            }
-            else {
-
-                verif = together(pcolumn, prow, layer, prepeated);
-            }
-
-            while (verif == 0) {
-                system("cls");
-                clearBoard(column, row, layer);
-                cout << "---------INVALID POSITION---------\nInput a position close to the last one.\n";
-                positions(pcolumn, prow);
-                verif = together(pcolumn, prow, layer, prepeated);
+                if (horiz == 1) { // after getting the 2 later squares on the board, we already know whether the boat is on the horizontal or vertical axis and the user must finish informing it on the same axis
+                    horiz = horizontal(pcolumn, prow, layer);
+                    while (horiz == 0) { // while the user keeps on inputing invalid positions, either because its far from the last ones, either bcz it's not on the same axis, this loop runs
+                        system("cls");
+                        clearBoard(column, row, layer);
+                        cout << "---------INVALID POSITION---------\nInput a position close to the last one and in the same row.\n";
+                        positions(pcolumn, prow);
+                        repeated = repeat(pcolumn, prow, layer);
+                        horiz = horizontal(pcolumn, prow, layer);
+                    }
+                }
+                
+                else { // same logic as before, but for the vertical axis
+                    vert = vertical(pcolumn, prow, layer);
+                    while (vert == 0) {
+                        system("cls");
+                        clearBoard(column, row, layer);
+                        cout << "---------INVALID POSITION---------\nInput a position close to the last one and in the same column .\n";
+                        positions(pcolumn, prow);
+                        repeated = repeat(pcolumn, prow, layer);
+                        vert = vertical(pcolumn, prow, layer);
+                    }
+                }
             }
         }
         j++;
     }
-
 }
 
 char SetPlayer1(int quantity, int length) // This functions stands for letting the Player 1 set all the boats on the board
@@ -305,8 +326,8 @@ char SetPlayer1(int quantity, int length) // This functions stands for letting t
     int layer = 0;
     char a;
     //submarine(layer, quantity, length);
-    //tugShip(layer, quantity, length);
-    destroyer(layer, quantity, length);
+    tugShip(layer, quantity, length);
+    //destroyer(layer, quantity, length);
     //cruzado(c);
     //porta(c);
     cout << "Perfect! All boats have been set!\n\n";
@@ -335,6 +356,7 @@ char SetPlayer1(int quantity, int length) // This functions stands for letting t
 
 int main()
 {
+    matrix();
     gameBoard(0);
     cout << "Player 1, please follow the instructions to set the position for each boat." << endl;
 
@@ -352,7 +374,7 @@ int main()
     aircraft.setLength("aircraft carrier");
     none.setLength("none boat");
 
-    SetPlayer1(destroyer.quantity, destroyer.length);
+    SetPlayer1(tug_ship.quantity, tug_ship.length);
 
     cout << "submarine length: " << submarine.length << endl;
     cout << "tug ship length: " << tug_ship.length << endl;

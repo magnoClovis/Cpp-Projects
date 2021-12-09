@@ -1,7 +1,6 @@
 ﻿  Naval Battle.cpp
-D:\clovi\Estudos\Repositórios\Cpp-Projects\Naval Battle\Naval Battle.cpp(101,12): warning C4101: 'j': variable local sin referencia
-D:\clovi\Estudos\Repositórios\Cpp-Projects\Naval Battle\Naval Battle.cpp(101,9): warning C4101: 'i': variable local sin referencia
-D:\clovi\Estudos\Repositórios\Cpp-Projects\Naval Battle\Naval Battle.cpp(107,5): warning C4273: '_getch': vinculación de DLL incoherente
+D:\clovi\Estudos\Repositórios\Cpp-Projects\Naval Battle\Naval Battle.cpp(96,12): warning C4101: 'j': variable local sin referencia
+D:\clovi\Estudos\Repositórios\Cpp-Projects\Naval Battle\Naval Battle.cpp(96,9): warning C4101: 'i': variable local sin referencia
+D:\clovi\Estudos\Repositórios\Cpp-Projects\Naval Battle\Naval Battle.cpp(102,5): warning C4273: '_getch': vinculación de DLL incoherente
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\ucrt\conio.h(411,45): message : vea la definición anterior de '_getch'
-     Creando biblioteca D:\clovi\Estudos\Repositórios\Cpp-Projects\Naval Battle\x64\Debug\Naval Battle.lib y objeto D:\clovi\Estudos\Repositórios\Cpp-Projects\Naval Battle\x64\Debug\Naval Battle.exp
   Naval Battle.vcxproj -> D:\clovi\Estudos\Repositórios\Cpp-Projects\Naval Battle\x64\Debug\Naval Battle.exe
