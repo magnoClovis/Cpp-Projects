@@ -71,7 +71,7 @@ void gameBoard(int c) // This function is responsible to print the board on the 
             The differences between them are just the number of squares used on each "cout<<"
             statement, so everything on the display will be symmetrical.*/
             if (j == 0 && i <= 9 && g_squares[i][j][c] == 'O') {
-                cout << i << " | " << g_squares[i][j][c] << " |";
+                cout << " " << i << " | " << g_squares[i][j][c] << " |";
             }
             else if (j == 0 && i <= 9) {
                 cout << " " << i << " |___|";
@@ -200,59 +200,18 @@ void clearBoard(int column, int row, int layer) {
     }
 }
 
-void submarine(int layer, int quantity, int length) //This function is responsible to set the positions for the submarines
-{
-    int i, column, row;
-    int* pcolumn = &column, * prow = &row;
-    for (i = 0; i < quantity; i++) {
-        cout << "Total of submarines on the board: " << i << endl << endl;
-        cout << "SUBMARINES: You have " << quantity << " submarines! Each submarine occupies " << length << " square on the board.\n";
-        positions(pcolumn, prow);
-        repeat(pcolumn, prow, layer);
-    }
+void setBoat(int layer, string type) { // Sets the destroyer on the board
+    Boats boat;
+    int quantity, length;
 
-}
+    boat.setLength(type);
+    boat.setQtt(boat.length);
 
-void tugShip(int layer, int quantity, int length)
-{
+    quantity = boat.quantity;
+    length = boat.length;
+
     int i, j, column, row;
     int* pcolumn = &column, * prow = &row;
-    bool repeated, horiz, vert;
-    bool* prepeated = &repeated;
-    j = 0;
-    horiz = 0, vert = 0, repeated = 1;
-    while (j < quantity) {
-        for (i = 0; i < length; i++) {
-            cout << "Total of Tug Ships on the board: " << j << endl << endl;
-            cout << "TUG SHIP: You have " << quantity << " tug ships! Each tug ship occupies " << length << " squares on the board.\n";
-
-            positions(pcolumn, prow);
-            repeated = repeat(pcolumn, prow, layer);
-
-            if (i == 1) {
-                horiz = horizontal(pcolumn, prow, layer);
-                vert = vertical(pcolumn, prow, layer);
-
-                while (horiz == 0 && vert == 0) {
-                    system("cls");
-                    clearBoard(column, row, layer);
-                    cout << "---------INVALID POSITION---------\nInput a position close to the last one.\n";
-                    positions(pcolumn, prow);
-                    repeated = repeat(pcolumn, prow, layer);
-                    horiz = horizontal(pcolumn, prow, layer);
-                    vert = vertical(pcolumn, prow, layer);
-                }
-                system("cls");
-                board(column, row, layer);
-            }
-        }
-        j++;
-    }
-}
-
-void destroyer(int layer, int quantity, int length) { // Sets the destroyer on the board
-    int i, j, column, row;
-    int* pcolumn = &column, *prow = &row;
     bool repeated, horiz, vert;
     bool* prepeated = &repeated;
     j = 0;
@@ -261,8 +220,8 @@ void destroyer(int layer, int quantity, int length) { // Sets the destroyer on t
     while (j < quantity) {
         for (i = 0; i < length; i++) {
 
-            cout << "Total of Destroyers on the board: " << j << endl << endl;
-            cout << "DESTROYER: You have " << quantity << " destroyer! The destroyer occupies " << length << " squares on the board.\n";
+            cout << "Total of " << type << " on the board: " << j << endl << endl;
+            cout << type << ": You have " << quantity << " " << type << "! Each " << type << " occupies " << length << " squares on the board.\n";
 
             positions(pcolumn, prow);
             if (i == 0) {
@@ -275,7 +234,7 @@ void destroyer(int layer, int quantity, int length) { // Sets the destroyer on t
                     horiz = horizontal(pcolumn, prow, layer); // horiz will be equal to 1 if the boat is horizontal on the board
                     vert = vertical(pcolumn, prow, layer); // vert will be equal to 1 if the boat is vertical on the board
 
-                    while (horiz == 0 && vert == 0){ // while both horiz and vert are equal to 0, it indicates that the boat isn't either in horizontal or vertical...
+                    while (horiz == 0 && vert == 0) { // while both horiz and vert are equal to 0, it indicates that the boat isn't either in horizontal or vertical...
                         system("cls");               // ...in other words, there's no continuity   
                         clearBoard(column, row, layer); // erase the last square informed, since this position is invalid
                         cout << "---------INVALID POSITION---------\nInput a position close to the last one.\n";
@@ -303,7 +262,7 @@ void destroyer(int layer, int quantity, int length) { // Sets the destroyer on t
                         horiz = horizontal(pcolumn, prow, layer);
                     }
                 }
-                
+
                 else { // same logic as before, but for the vertical axis
                     vert = vertical(pcolumn, prow, layer);
                     while (vert == 0) {
@@ -321,67 +280,56 @@ void destroyer(int layer, int quantity, int length) { // Sets the destroyer on t
     }
 }
 
-char SetPlayer1(int quantity, int length) // This functions stands for letting the Player 1 set all the boats on the board
+char SetPlayer(int layer) // This functions stands for letting the players set all the boats on the board
 {
-    int layer = 0;
     char a;
-    //submarine(layer, quantity, length);
-    tugShip(layer, quantity, length);
-    //destroyer(layer, quantity, length);
-    //cruzado(c);
-    //porta(c);
+    string types[] = { "submarine", "tug ship", "destroyer", "cruiser", "aircraft carrier" };
+    cout << "Player " << layer+1 << ", please follow the instructions to set the position for each boat." << endl;
+  
+    for (int i = 0; i < 1; i++) {
+        setBoat(layer, types[i]);
+    }
+    
     cout << "Perfect! All boats have been set!\n\n";
     system("pause");
     system("cls");
-    cout << "The game will be:\nA. Against a person\nB. Against the computer\n";
-    a = _getch();
-    while (true)
-    {
-        if (a == 'A' || a == 'a')
+
+    if (layer == 0) {
+        cout << "The game will be:\nA. Against a person\nB. Against the computer\n";
+        a = _getch();
+        while (true)
         {
-            return a;
-        }
-        if (a == 'B' || a == 'b')
-        {
-            return a;
-        }
-        else
-        {
-            cout << "Input a valid option!!\n";
-            cout << "The game will be:\nA. Against a person\nB. Against the computer\n";
-            a = _getch();
+            if (a == 'A' || a == 'a')
+            {
+                return a;
+            }
+            if (a == 'B' || a == 'b')
+            {
+                return a;
+            }
+            else
+            {
+                cout << "Input a valid option!!\n";
+                cout << "The game will be:\nA. Against a person\nB. Against the computer\n";
+                a = _getch();
+            }
         }
     }
 }
 
+
 int main()
 {
+    char against;
     matrix();
     gameBoard(0);
-    cout << "Player 1, please follow the instructions to set the position for each boat." << endl;
-
-    Boats submarine, tug_ship, destroyer, cruiser, aircraft, none;
-    submarine.setLength("submarine");
-    submarine.setQtt(submarine.length);
-
-    tug_ship.setLength("tug ship");
-    tug_ship.setQtt(tug_ship.length);
-
-    destroyer.setLength("destroyer");
-    destroyer.setQtt(destroyer.length);
-
-    cruiser.setLength("cruiser");
-    aircraft.setLength("aircraft carrier");
-    none.setLength("none boat");
-
-    SetPlayer1(tug_ship.quantity, tug_ship.length);
-
-    cout << "submarine length: " << submarine.length << endl;
-    cout << "tug ship length: " << tug_ship.length << endl;
-    cout << "destroyer length: " << destroyer.length << endl;
-    cout << "cruiser length: " << cruiser.length << endl;
-    cout << "aircraft carrier length: " << aircraft.length << endl;
-    cout << "none boat length: " << none.length << endl;
+   
+    against = SetPlayer(0);
+    if (against == 'A' || against == 'a') {
+        SetPlayer(1);
+    }
+    
 
     return 0;
 }
+
