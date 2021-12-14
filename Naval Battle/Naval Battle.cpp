@@ -13,6 +13,8 @@
 
 using namespace std;
 
+char g_water = '.';
+char g_fire = 'X';
 char g_squares[10][10][2];
 
 void matrix()
@@ -58,7 +60,7 @@ void showBoard()
 
 }
 
-void gameBoard(int c) // This function is responsible to print the board on the screen during the game, allowing the player to visualize the game board
+void playerBoard(int layer) // This function is responsible to print the board on the screen during the game, allowing the player to visualize the game board
 {
     int i, j;
     cout << "Welcome to Naval Battle!! First we are setting the position for each boat on the board!" << endl << endl;
@@ -70,15 +72,15 @@ void gameBoard(int c) // This function is responsible to print the board on the 
             /* The conditions below are used for a better visual representation.
             The differences between them are just the number of squares used on each "cout<<"
             statement, so everything on the display will be symmetrical.*/
-            if (j == 0 && i <= 9 && g_squares[i][j][c] == 'O') {
-                cout << " " << i << " | " << g_squares[i][j][c] << " |";
+            if (j == 0 && i <= 9 && g_squares[i][j][layer] == 'O') {
+                cout << " " << i << " | " << g_squares[i][j][layer] << " |";
             }
             else if (j == 0 && i <= 9) {
                 cout << " " << i << " |___|";
             }
             else {
-                if (g_squares[i][j][c] == 'O') {
-                    cout << " " << g_squares[i][j][c] << " |";
+                if (g_squares[i][j][layer] == 'O') {
+                    cout << " " << g_squares[i][j][layer] << " |";
                 }
                 else {
                     cout << ("___|");
@@ -96,7 +98,7 @@ void board(int column, int row, int layer)
     int i, j; // Again, 'i' represents the rows and 'j' the columns
 
     g_squares[row][column][layer] = 'O';
-    gameBoard(layer);
+    playerBoard(layer);
 }
 
 int _getch()
@@ -141,7 +143,7 @@ int repeat(int* column, int* row, int layer) { // This function repeats the code
     repeated = false;
     while (g_squares[*row][*column][layer] == 79) // Verifies if the space is already filled with the letter 'O' (79 in ASCII)
     {
-        gameBoard(layer);
+        playerBoard(layer);
         cout << "Choose a position that has not been choosen yet!!\n";
         positions(column, row); //Here in this function, column and row are already pointers, thats why it's not being passed pcolumn/ prow as arguments to "positions".
         system("cls");
@@ -202,7 +204,11 @@ void clearBoard(int column, int row, int layer) {
 
 void setBoat(int layer, string type) { // Sets the destroyer on the board
     Boats boat;
-    int quantity, length;
+
+    int i, j, column, row, quantity, length;
+    int* pcolumn = &column, * prow = &row;
+    bool repeated, horiz, vert;
+    bool* prepeated = &repeated;
 
     boat.setLength(type);
     boat.setQtt(boat.length);
@@ -210,10 +216,6 @@ void setBoat(int layer, string type) { // Sets the destroyer on the board
     quantity = boat.quantity;
     length = boat.length;
 
-    int i, j, column, row;
-    int* pcolumn = &column, * prow = &row;
-    bool repeated, horiz, vert;
-    bool* prepeated = &repeated;
     j = 0;
     horiz = 0, vert = 0, repeated = 1; // 0 for false and 1 for true
 
@@ -317,19 +319,246 @@ char SetPlayer(int layer) // This functions stands for letting the players set a
     }
 }
 
+void gameBoard(int layer)
+{
+    int i, j;
+    cout << "     A   B   C   D   E   F   G   H   I   J" << endl;
+    for (i = 0; i < 10; i++) {
+        j = 0;
+        while (j < 10) {
+            if (j == 0 && i <= 9 && (g_squares[i][j][layer] == g_fire || g_squares[i][j][layer] == g_water)) {
+                cout << " " << i << " | " << g_squares[i][j][layer] << " |";
+            }
+            else if (j == 0 && i <= 9) {
+                cout << " " << i << " |___|";
+            }
+            else {
+                if (g_squares[i][j][layer] == g_fire || g_squares[i][j][layer] == g_water) {
+                    cout << " " << g_squares[i][j][layer] << " |";
+                }
+                else {
+                    cout << "___|";
+                }
+            }
+            j++;
+        }
+        cout << "\n\n";
+    }
+}
+
+unsigned int random()
+{
+    int r;
+    srand((unsigned)time(NULL));
+    r = rand();
+    return r;
+}
+
+int winner(int layer)
+{
+    int i, j;
+    bool  O;
+    O = false;
+    for (i = 0; i < 10; i++)
+    {
+        for (j = 0; j < 10; j++)
+        {
+            if (g_squares[i][j][layer] == 'O') {
+                return 0;
+            }
+        }
+    }
+    return 1;
+}
+
+int boardAttack(int *column, int *row, int layer)
+{
+    // This function changes an element on the matrix "g_squares" and show what the changes did on the table
+    int i, j, attack; // 'i' represents teh lines and 'j' the columns
+    attack = 0;
+    if (g_squares[*row][*column][layer] == 'O'){
+        system("cls");
+        g_squares[*row][*column][layer] = g_fire;
+        gameBoard(layer);
+        printf("YOU HIT A BOAT!!\n");
+        system("pause");
+        system("cls");
+        attack = 1;
+    }
+    else if (g_squares[*row][*column][layer] == g_fire) {
+        system("cls");
+        gameBoard(layer);
+        printf("YOU DIDN'T HIT ANY BOAT!!\n");
+        system("pause");
+        system("cls");
+        attack = 0;
+    }
+    else {
+        system("cls");
+        g_squares[*row][*column][layer] = g_water;
+        gameBoard(layer);
+        printf("YOU DIDN'T HIT ANY BOAT!!\n");
+        system("pause");
+        system("cls");
+        attack = 0;
+    }
+
+    return attack;
+}
+
+void gameOver(int layer)
+{
+    int i, j;
+    for (i = 0; i < 10; i++) {
+        j = 0;
+        while (j < 10)
+        {
+            if (j == 0 && i <= 9 && (g_squares[i][j][layer] == g_fire || g_squares[i][j][layer] == 'O' || g_squares[i][j][layer] == '   ')) {
+                cout << i << " " << " | " << g_squares[i][j][layer] << " | ";
+            }
+            else if (j == 0 && i <= 9) {
+                cout << " " << i << " |___| ";
+            }
+            else {
+                if (g_squares[i][j][layer] == g_fire || g_squares[i][j][layer] == 'O' || g_squares[i][j][layer] == '   ') {
+                    cout << " " << g_squares[i][j][layer] << " | ";
+                }
+                else {
+                    cout << "___|";
+                }
+            }
+            j++;
+        }
+        cout << endl << endl;
+    }
+}
+
+void playerOneAttack(int layer, int* attack, int* win) {
+    int column, row;
+    int* pcolumn = &column, * prow = &row;
+    cout << "It's Player 1's turn!\n";
+    gameBoard(layer);
+    cout << "Choose the square to attack on Player 2's board. \n";
+    positions(pcolumn, prow);
+    *attack = boardAttack(pcolumn, prow, layer);
+    *win = winner(layer);
+    if (*win == 1)
+    {
+        system("cls");
+        cout << "---------PLAYER 1 WON THE GAME!!!---------\n";
+        cout << "PLAYER 2'S BOARD\n\n";
+        gameOver(1);
+        cout << endl;
+        system("pause");
+        cout << "PLAYER 1'S BOARD\n\n";
+        gameOver(0);
+        system("pause");
+    }
+}
+
+void playerTwoAttack(int layer, int* attack, int* win) {
+    int column, row;
+    int* pcolumn = &column, * prow = &row;
+    cout << "It's Player 2's turn!\n";
+    gameBoard(layer);
+    cout << "Choose the square to attack on Player 1's board. \n";
+    positions(pcolumn, prow);
+    *attack = boardAttack(pcolumn, prow, layer);
+    *win = winner(layer);
+    if (*win == 1)
+    {
+        system("cls");
+        cout << "---------PLAYER 2 WON THE GAME!!!---------\n";
+        cout << "PLAYER 1'S BOARD\n\n";
+        gameOver(1);
+        cout << endl;
+        system("pause");
+        cout << "PLAYER 2'S BOARD\n\n";
+        gameOver(0);
+        system("pause");
+    }
+}
+
+void game(unsigned int r)
+{
+    int layer, win, attack;
+    int *pwin = &win, *pattack = &attack;
+    win = 0;
+    attack = 1;
+    cout << "Let's begin the game\n";
+    if (r == 0) {
+        cout << "Player 1 is the first one to play." << endl;
+        system("pause");
+        system("cls");
+        while (win == 0)
+        {
+            attack = 1;
+            while (attack == 1)
+            {
+                layer = 1;
+                playerOneAttack(layer, pattack, pwin);
+                if (win == 1) {
+                    return;
+                }
+            }
+            attack = 1;
+            while (attack == 1)
+            {
+                layer = 0;
+                playerTwoAttack(layer, pattack, pwin);
+                if (win == 1) {
+                    return;
+                }
+            }
+
+        }
+
+    }
+    else if (r == 1) {
+        cout << "Player 2 is the first one to play." << endl;
+        system("pause");
+        system("cls");
+        while (win == 0)
+        {
+            attack = 1;
+            while (attack == 1)
+            {
+                layer = 0;
+                playerTwoAttack(layer, pattack, pwin);
+                if (win == 1) {
+                    return;
+                }
+            }
+
+            attack = 1;
+            attack = 1;
+            while (attack == 1)
+            {
+                layer = 1;
+                playerOneAttack(layer, pattack, pwin);
+                if (win == 1) {
+                    return;
+                }
+            }
+        }
+    }
+}
+
 
 int main()
-{
+{   
+    srand((unsigned)time(NULL));
     char against;
     matrix();
-    gameBoard(0);
+    playerBoard(0);
    
     against = SetPlayer(0);
     if (against == 'A' || against == 'a') {
+        playerBoard(1);
         SetPlayer(1);
+        game(random()%2);
     }
     
 
     return 0;
 }
-
