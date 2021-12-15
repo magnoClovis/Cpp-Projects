@@ -94,15 +94,13 @@ void playerBoard(int layer) // This function is responsible to print the board o
 
 void board(int column, int row, int layer)
 {
-    // This function changes an element on the matrix "squares" and show what the changes did on the board
-    int i, j; // Again, 'i' represents the rows and 'j' the columns
-
+    // This function changes an element on the matrix "squares" when the player is setting the boats on the board, 
+    // and show what the changes did on the board
     g_squares[row][column][layer] = 'O';
     playerBoard(layer);
 }
 
-int _getch()
-{
+int _getch() {// This function is responsible to get the inputs from the players, everytime something need to be inputed, this function is called
     char ch;
     ch = '\n';
     while (ch == '\n')
@@ -121,13 +119,13 @@ int _getch()
 void positions(int* column, int* row) { // In this function it is used pointers to modify the values of rows and columns
     cout << "Type a COLUMN using a letter from A to J.\n";
     *column = _getch();
-    while (*column < 65 || *column>74 && (*column < 97 || *column>106)) // Verifies if the input is a letter between A and J
+    while (*column < 65 || *column>74 && (*column < 97 || *column>106)) // Checks if the input is a letter between A and J
     {
         cout << "Input a valid option!!\n";;
         *column = _getch();
     }
     cout << "Now, input the ROW using numbers from '0' to '9'.\n";
-    *row = _getch() - 48;
+    *row = _getch() - 48; // Converts 'char' numbers to their values in 'int' using ASCII
     if (*column < 97) { // Converts capital and lower case letters in numbers from 0 to 9
         *column = *column - 65;
     }
@@ -152,26 +150,26 @@ int repeat(int* column, int* row, int layer) { // This function repeats the code
     return repeated;
 }
 
-
-bool vertical(int* column, int* row, int layer) {
+bool vertical(int* column, int* row, int layer) { // Here it is verified if the input of the boat on the board is in vertical
     bool vert = 0;
-    if (g_squares[*row - 1][*column][layer] == 79 || g_squares[*row + 1][*column][layer] == 79) { // verifies continuity in vertica
+    if (g_squares[*row - 1][*column][layer] == 79 || g_squares[*row + 1][*column][layer] == 79) { // This condition verifies the continuity in the vertical axis
         vert = true;
         return vert;
     }
     else { return false;  }
 }
 
-bool horizontal(int* column, int* row, int layer) {
+bool horizontal(int* column, int* row, int layer) { // Here it is verified if the input of the boat on the board is in horizontal
     bool horiz = 0;
-    if (g_squares[*row][*column - 1][layer] == 79 || g_squares[*row][*column + 1][layer] == 79) { // verifies continuity in horizontal
+    if (g_squares[*row][*column - 1][layer] == 79 || g_squares[*row][*column + 1][layer] == 79) { // This condition verifies the continuity in the horizontal axis
         horiz = true;
         return horiz;
     }
     else { return false; }
 }
 
-void clearBoard(int column, int row, int layer) {
+void clearBoard(int column, int row, int layer) { // This function is responsible for cleaning a specific space of the board by setting its value to zero if the player
+                                                  // inputs an invalid value while setting the boats on the board
 
     int i, j;
 
@@ -179,7 +177,7 @@ void clearBoard(int column, int row, int layer) {
 
     cout << "     A   B   C   D   E   F   G   H   I   J" << endl;
 
-    for (i = 0; i < 10; i++) { // shows the board
+    for (i = 0; i < 10; i++) { // shows the board with no changes 
         j = 0;
         while (j < 10) {
             if (j == 0 && i <= 9 && g_squares[i][j][layer] == 79) {
@@ -202,46 +200,45 @@ void clearBoard(int column, int row, int layer) {
     }
 }
 
-void setBoat(int layer, string type) { // Sets the destroyer on the board
-    Boats boat;
-
+void setBoat(int layer, string type) { // Here the boats are set in the board, for that it is used some of the functions above and, in order to help, objects from the 'Boats' class are created
+    Boats boat; // Creating object
     int i, j, column, row, quantity, length;
-    int* pcolumn = &column, * prow = &row;
-    bool repeated, horiz, vert;
-    bool* prepeated = &repeated;
+    int* pcolumn = &column, * prow = &row; // pointers so the value of these variables can be changed and used in more than one function
+    bool repeated, horiz, vert; // bools for checking continuity and repetition of choosen squares while the player is setting the boats on the board
+    bool* prepeated = &repeated; // pointer so the value of the boolean variable 'repeated' can be changed and used in more than one function
 
-    boat.setLength(type);
-    boat.setQtt(boat.length);
+    boat.setLength(type); // setting length characteristic for the object from the boat class
+    boat.setQtt(boat.length); // after setting the length, it is then set the quantity of that boat on the board
 
-    quantity = boat.quantity;
-    length = boat.length;
+    quantity = boat.quantity; // savig the quantity of boats in a variable
+    length = boat.length;// saving the lenght of the boats in another variable
 
     j = 0;
     horiz = 0, vert = 0, repeated = 1; // 0 for false and 1 for true
 
-    while (j < quantity) {
-        for (i = 0; i < length; i++) {
+    while (j < quantity) { // this first while loop stands for setting the correct quantity of each boat on the board
+        for (i = 0; i < length; i++) { // this for loop is used for setting the correct amount of spaces that each boat has
 
             cout << "Total of " << type << " on the board: " << j << endl << endl;
             cout << type << ": You have " << quantity << " " << type << "! Each " << type << " occupies " << length << " squares on the board.\n";
 
-            positions(pcolumn, prow);
-            if (i == 0) {
-                repeated = repeat(pcolumn, prow, layer); // checking only repetitions, no need to check continuity at the first iteration
+            positions(pcolumn, prow); // gets the choosen space from the player
+            if (i == 0) { /// if its the first iteration, then.....
+                repeated = repeat(pcolumn, prow, layer); // checks only for repetition of spaces, no need to check continuity in the first iteration
             }
-            // this 'else if' block can be transformed into a function
-            else if (i == 1) {
-                repeated = repeat(pcolumn, prow, layer); // check repetition
-                if (repeated == 0) { // then check continuity and identify the axis
+           
+            else if (i == 1) { // if it is the second iteration, then...
+                repeated = repeat(pcolumn, prow, layer); // first, check for repetition as before in the first iteration
+                if (repeated == 0) { // then check continuity and identify the axis (vertical or horizontal)
                     horiz = horizontal(pcolumn, prow, layer); // horiz will be equal to 1 if the boat is horizontal on the board
                     vert = vertical(pcolumn, prow, layer); // vert will be equal to 1 if the boat is vertical on the board
 
-                    while (horiz == 0 && vert == 0) { // while both horiz and vert are equal to 0, it indicates that the boat isn't either in horizontal or vertical...
+                    while (horiz == 0 && vert == 0) { // while both horiz and vert are equal to 0, it shows that the boat isn't either in horizontal or vertical...
                         system("cls");               // ...in other words, there's no continuity   
                         clearBoard(column, row, layer); // erase the last square informed, since this position is invalid
                         cout << "---------INVALID POSITION---------\nInput a position close to the last one.\n";
                         positions(pcolumn, prow); // gets another position
-                        repeated = repeat(pcolumn, prow, layer);
+                        repeated = repeat(pcolumn, prow, layer); // checks again for repetition of spaces
                         horiz = horizontal(pcolumn, prow, layer); // checks continuity on horizontal again
                         vert = vertical(pcolumn, prow, layer); // checks continuity on vertical again
                     }
@@ -250,18 +247,18 @@ void setBoat(int layer, string type) { // Sets the destroyer on the board
                 }
             }
 
-            // This last block can also be transformed into another function
             else { // after the second loop
-                repeated = repeat(pcolumn, prow, layer);
-                if (horiz == 1) { // after getting the 2 later squares on the board, we already know whether the boat is on the horizontal or vertical axis and the user must finish informing it on the same axis
-                    horiz = horizontal(pcolumn, prow, layer);
+                repeated = repeat(pcolumn, prow, layer); // again, first set for repetitions
+                // after getting the 2 later squares on the board, we already know whether the boat is on the horizontal or vertical axis and the user must finish input the boat on the same axis
+                if (horiz == 1) { // if the horizontal axis is the axis choosed for the player, then this if block will be executed and it looks for horizontal continuity
+                    horiz = horizontal(pcolumn, prow, layer); // checks for horizontal continuity
                     while (horiz == 0) { // while the user keeps on inputing invalid positions, either because its far from the last ones, either bcz it's not on the same axis, this loop runs
                         system("cls");
-                        clearBoard(column, row, layer);
+                        clearBoard(column, row, layer); // clear the last invalid position informed
                         cout << "---------INVALID POSITION---------\nInput a position close to the last one and in the same row.\n";
-                        positions(pcolumn, prow);
-                        repeated = repeat(pcolumn, prow, layer);
-                        horiz = horizontal(pcolumn, prow, layer);
+                        positions(pcolumn, prow); // asks for other values
+                        repeated = repeat(pcolumn, prow, layer); // checks for repetitions
+                        horiz = horizontal(pcolumn, prow, layer); // checks for horizontal continuity again (note that for this if block the value of horizontal can be changed, but the vertical can't)
                     }
                 }
 
@@ -273,7 +270,7 @@ void setBoat(int layer, string type) { // Sets the destroyer on the board
                         cout << "---------INVALID POSITION---------\nInput a position close to the last one and in the same column .\n";
                         positions(pcolumn, prow);
                         repeated = repeat(pcolumn, prow, layer);
-                        vert = vertical(pcolumn, prow, layer);
+                        vert = vertical(pcolumn, prow, layer); // again, here the value of vertical can be changed, but the horizontal can't
                     }
                 }
             }
@@ -282,14 +279,14 @@ void setBoat(int layer, string type) { // Sets the destroyer on the board
     }
 }
 
-char SetPlayer(int layer) // This functions stands for letting the players set all the boats on the board
+char SetPlayer(int layer) // This functions stands for letting both players set all the boats on the board
 {
     char a;
-    string types[] = { "submarine", "tug ship", "destroyer", "cruiser", "aircraft carrier" };
+    string types[] = { "submarine", "tug ship", "destroyer", "cruiser", "aircraft carrier" }; //listing all the existing boats so then it can be used in the 'setBoat' function
     cout << "Player " << layer+1 << ", please follow the instructions to set the position for each boat." << endl;
   
     for (int i = 0; i < 1; i++) {
-        setBoat(layer, types[i]);
+        setBoat(layer, types[i]); // setting the different boats on the board, by using the values on the 'types' array, the objects are created and each one has its characterists of length and quantity
     }
     
     cout << "Perfect! All boats have been set!\n\n";
@@ -297,7 +294,7 @@ char SetPlayer(int layer) // This functions stands for letting the players set a
     system("cls");
 
     if (layer == 0) {
-        cout << "The game will be:\nA. Against a person\nB. Against the computer\n";
+        cout << "The game will be:\nA. Against a person\nB. Against the computer\n"; // choose if the game will be played against a person or a computer
         a = _getch();
         while (true)
         {
@@ -319,21 +316,21 @@ char SetPlayer(int layer) // This functions stands for letting the players set a
     }
 }
 
-void gameBoard(int layer)
+void gameBoard(int layer) // This functions shows the changes on the board during the game
 {
     int i, j;
     cout << "     A   B   C   D   E   F   G   H   I   J" << endl;
     for (i = 0; i < 10; i++) {
         j = 0;
         while (j < 10) {
-            if (j == 0 && i <= 9 && (g_squares[i][j][layer] == g_fire || g_squares[i][j][layer] == g_water)) {
-                cout << " " << i << " | " << g_squares[i][j][layer] << " |";
+            if (j == 0 && i <= 9 && (g_squares[i][j][layer] == g_fire || g_squares[i][j][layer] == g_water)) { // whether the player hits a boat or not, it shows on the screen what happened
+                cout << " " << i << " | " << g_squares[i][j][layer] << " |";                                   // if a boat is hit, a 'X' is shown on the board, if nothing is hit, then a '.' is shown 
             }
             else if (j == 0 && i <= 9) {
                 cout << " " << i << " |___|";
             }
             else {
-                if (g_squares[i][j][layer] == g_fire || g_squares[i][j][layer] == g_water) {
+                if (g_squares[i][j][layer] == g_fire || g_squares[i][j][layer] == g_water) { // same as above
                     cout << " " << g_squares[i][j][layer] << " |";
                 }
                 else {
@@ -346,16 +343,14 @@ void gameBoard(int layer)
     }
 }
 
-unsigned int random()
-{
+unsigned int random() { // getting positive random values for both: choosing who starts and also automatically setting the positions for the computer in case the player plays agains the computer 
     int r;
     srand((unsigned)time(NULL));
     r = rand();
     return r;
 }
 
-int winner(int layer)
-{
+int winner(int layer) { // checks if someone have won the game
     int i, j;
     bool  O;
     O = false;
@@ -363,20 +358,18 @@ int winner(int layer)
     {
         for (j = 0; j < 10; j++)
         {
-            if (g_squares[i][j][layer] == 'O') {
-                return 0;
+            if (g_squares[i][j][layer] == 'O') { // a player wins if its opponent board has no "O"s, which indicates the player has found all the boats of their opponent
+                return 0; // if an 'O' is found, then theres no win, then, return 0
             }
         }
     }
-    return 1;
+    return 1; // if no 'O' in found, it shows that all the boats have been found and so there's a win, then, the code will end here in this line and '1' will be returned
 }
 
-int boardAttack(int *column, int *row, int layer)
-{
+int boardAttack(int *column, int *row, int layer) {
     // This function changes an element on the matrix "g_squares" and show what the changes did on the table
-    int i, j, attack; // 'i' represents teh lines and 'j' the columns
-    attack = 0;
-    if (g_squares[*row][*column][layer] == 'O'){
+    int attack = 0;
+    if (g_squares[*row][*column][layer] == 'O'){ // hit a boat
         system("cls");
         g_squares[*row][*column][layer] = g_fire;
         gameBoard(layer);
@@ -385,7 +378,7 @@ int boardAttack(int *column, int *row, int layer)
         system("cls");
         attack = 1;
     }
-    else if (g_squares[*row][*column][layer] == g_fire) {
+    else if (g_squares[*row][*column][layer] == g_fire) { // if the player attacks a square where there is a boat but it has already been attacked, then it counts as if the player did not hit anything
         system("cls");
         gameBoard(layer);
         printf("YOU DIDN'T HIT ANY BOAT!!\n");
@@ -393,7 +386,7 @@ int boardAttack(int *column, int *row, int layer)
         system("cls");
         attack = 0;
     }
-    else {
+    else { // else, if the position does not have a non hit boat or an already hit boat, so it's water and the player didn't hit anything
         system("cls");
         g_squares[*row][*column][layer] = g_water;
         gameBoard(layer);
@@ -402,12 +395,10 @@ int boardAttack(int *column, int *row, int layer)
         system("cls");
         attack = 0;
     }
-
-    return attack;
+    return attack; // returns 1 if hits a boat, 0 if did not hit any
 }
 
-void gameOver(int layer)
-{
+void gameOver(int layer) { // screens the boards after a win showing all the hit and non hit boats
     int i, j;
     for (i = 0; i < 10; i++) {
         j = 0;
@@ -433,16 +424,16 @@ void gameOver(int layer)
     }
 }
 
-void playerOneAttack(int layer, int* attack, int* win) {
+void playerOneAttack(int layer, int* attack, int* win) { // fuctions played when player one attacks
     int column, row;
-    int* pcolumn = &column, * prow = &row;
+    int* pcolumn = &column, * prow = &row; 
     cout << "It's Player 1's turn!\n";
-    gameBoard(layer);
+    gameBoard(layer); // shows player 2's board on the screen
     cout << "Choose the square to attack on Player 2's board. \n";
-    positions(pcolumn, prow);
-    *attack = boardAttack(pcolumn, prow, layer);
-    *win = winner(layer);
-    if (*win == 1)
+    positions(pcolumn, prow); // gets the position to attack
+    *attack = boardAttack(pcolumn, prow, layer); // attacks
+    *win = winner(layer); // checks for wins
+    if (*win == 1) // if there's a win, then...
     {
         system("cls");
         cout << "---------PLAYER 1 WON THE GAME!!!---------\n";
@@ -456,7 +447,7 @@ void playerOneAttack(int layer, int* attack, int* win) {
     }
 }
 
-void playerTwoAttack(int layer, int* attack, int* win) {
+void playerTwoAttack(int layer, int* attack, int* win) { // fuctions played when player two attacks, the same used in the lest function is used here, but for the player 2
     int column, row;
     int* pcolumn = &column, * prow = &row;
     cout << "It's Player 2's turn!\n";
@@ -479,12 +470,12 @@ void playerTwoAttack(int layer, int* attack, int* win) {
     }
 }
 
-void game(unsigned int r)
+void game(unsigned int r) // this function is where the game starts after the players set all the boats on the board
 {
     int layer, win, attack;
     int *pwin = &win, *pattack = &attack;
     win = 0;
-    attack = 1;
+    attack = 1; // starts in 1 so some of the loops can start and keep running if the player hits a boat
     cout << "Let's begin the game\n";
     if (r == 0) {
         cout << "Player 1 is the first one to play." << endl;
@@ -493,7 +484,7 @@ void game(unsigned int r)
         while (win == 0)
         {
             attack = 1;
-            while (attack == 1)
+            while (attack == 1) // while the player one hits a boat, then this loop keep on running
             {
                 layer = 1;
                 playerOneAttack(layer, pattack, pwin);
@@ -502,7 +493,7 @@ void game(unsigned int r)
                 }
             }
             attack = 1;
-            while (attack == 1)
+            while (attack == 1) // same for player two
             {
                 layer = 0;
                 playerTwoAttack(layer, pattack, pwin);
@@ -514,7 +505,7 @@ void game(unsigned int r)
         }
 
     }
-    else if (r == 1) {
+    else if (r == 1) { // the same happens here when player 2 is the first one to play
         cout << "Player 2 is the first one to play." << endl;
         system("pause");
         system("cls");
@@ -544,21 +535,17 @@ void game(unsigned int r)
     }
 }
 
-
 int main()
 {   
     srand((unsigned)time(NULL));
-    char against;
-    matrix();
-    playerBoard(0);
-   
-    against = SetPlayer(0);
-    if (against == 'A' || against == 'a') {
-        playerBoard(1);
-        SetPlayer(1);
-        game(random()%2);
+    char against; // agains a person or the computer
+    matrix(); // starting a 3D matrix full of zeros
+    playerBoard(0); // shows the player one's board on the screen
+    against = SetPlayer(0); // set the position of the boats on the player one's board
+    if (against == 'A' || against == 'a') { // if playing agains a person, then...
+        playerBoard(1); // shows the player two's board on the screen
+        SetPlayer(1); // set the position of the player two's boats on the board
+        game(random()%2); // start the game and decides who goes first
     }
-    
-
     return 0;
 }
