@@ -1,4 +1,3 @@
-﻿  Naval Battle.cpp
-D:\clovi\Estudos\Repositórios\Cpp-Projects\Naval Battle\Naval Battle.cpp(103,5): warning C4273: '_getch': vinculación de DLL incoherente
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\ucrt\conio.h(411,45): message : vea la definición anterior de '_getch'
+﻿  source.cpp
+D:\clovi\Estudos\Repositórios\Cpp-Projects\Naval Battle\source.cpp(311): warning C4715: 'SetPlayer': no todas las rutas de acceso de control devuelven un valor
   Naval Battle.vcxproj -> D:\clovi\Estudos\Repositórios\Cpp-Projects\Naval Battle\x64\Debug\Naval Battle.exe

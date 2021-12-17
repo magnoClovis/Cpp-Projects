@@ -1,4 +1,6 @@
+#include <string>
 #pragma once
+#include <string>
 #ifndef BOATS_H
 #define BOATS_H
 #include <string>
