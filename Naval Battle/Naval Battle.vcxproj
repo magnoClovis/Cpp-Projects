@@ -139,14 +139,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Boats.cpp" />
+    <ClCompile Include="boats.cpp" />
+    <ClCompile Include="computer_game.cpp" />
     <ClCompile Include="Naval Battle.cpp" />
-    <ClCompile Include="source.cpp" />
+    <ClCompile Include="player.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Boats.h" />
+    <ClInclude Include="boats.h" />
+    <ClInclude Include="computer_game.h" />
     <ClInclude Include="resource.h" />
-    <ClInclude Include="source.h" />
+    <ClInclude Include="player.h" />
+    <ClInclude Include="variables.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Naval Battle.rc" />
