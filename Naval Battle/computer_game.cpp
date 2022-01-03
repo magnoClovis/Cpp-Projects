@@ -23,49 +23,38 @@ int computerBoard(int column, int row, int layer)
     return 0;
 }
 
-void lockBoat(int layer) {
+void lockBoat(int layer) { // This function is responsible to temporally lock the already defined boats and make them different from the others in the future
     for (int i = 0; i < 10; i++) {
         for (int j = 0; j < 10; j++) {
-            if (g_squares[j][i][layer] == g_set_boat) {
-                g_squares[j][i][layer] = g_boat;
+            if (g_squares[j][i][layer] == g_set_boat) { // When some boat is set, first it is given the character on 'g_set_boat', then after informing all spaces from a boat, the character on its position is changed
+                g_squares[j][i][layer] = g_boat;        // to another one, so the next boats don't recognize the others already defined as parts of itself because the characters are different.
             }
         }
     }
 }
 
-void clearComputerBoard(int column, int row, int layer)
-{
-    g_squares[row][column][layer] = 0;
-}
-
-
-void computerPositions(int* column, int* row, int axis) { // In this function it is used pointers to modify the values of rows and columns
+void computerPositions(int* column, int* row, int axis) { // In this function it is used pointers to modify the values of rows and columns according to the axis
     switch (axis) {
     case 0:
-        *column = randomValues();
+        *column = randomValues(); // if horizontal, change only the value of the column and keep the row
         break;
     case 1:
-        *row = randomValues();
+        *row = randomValues(); // if vertical, change only the row and keep the column the same
         break;
-    default:
+    default:   // if the axis is not stablished yet, then set both, column and row 
         *row = randomValues();
         *column = randomValues();
     }
 
 }
 
-void cPlayerBoard(int layer) // This function is responsible to print the board on the screen during the game, allowing the player to visualize the game board
+void cPlayerBoard(int layer) // This function is just used for testing the generation of random positions, during the game this function is not used. It displays the board on the screen showing the positions generated for the computer
 {
     int i, j;
-    cout << "Welcome to Naval Battle!! First we are setting the position for each boat on the board!" << endl << endl;
-    cout << ("     A   B   C   D   E   F   G   H   I   J");
     cout << endl;
     for (i = 0; i < 10; i++) {
         j = 0;
         while (j < 10) {
-            /* The conditions below are used for a better visual representation.
-            The differences between them are just the number of squares used on each "cout<<"
-            statement, so everything on the display will be symmetrical.*/
             if (j == 0 && i <= 9 && (g_squares[i][j][layer] == g_boat || g_squares[i][j][layer] == g_set_boat)) {
                 cout << " " << i << " | " << g_squares[i][j][layer] << " |";
             }
@@ -86,35 +75,36 @@ void cPlayerBoard(int layer) // This function is responsible to print the board 
     }
 }
 
-int computerRepeat(int* column, int* row, int layer, int axis, int* repeated, int square, int* fit) { // This function repeats the code if the user input some position that is not valid
-
-    if (axis == 0) {
-        if (((*column + square) <= 9) && *repeated == 0) {
-            switch (g_squares[*row][*column + square][layer]) {
-            case 83:
+int computerRepeat(int* column, int* row, int layer, int axis, int* repeated, int square, int* fit) { // This function checks if the positions chosed randomly are valid or not.
+                                                                                                     // This function also choose the next postions for the boat after the first one is choosed, after it,
+                                                                                                    // it checks if this square is valid or not before setting it on the board.
+    if (axis == 0) { // if horizontal, then....
+        if (((*column + square) <= 9) && *repeated == 0) { // checks if the value of the column + the next possible value is something smaller than 9
+            switch (g_squares[*row][*column + square][layer]) { // if so, verifies if the position is already filled
+            case 83: // if it's filled with and 'S' (83 in ASCII), it's invalid, then, 'repeated' is set to 1, showing this position is already filled
+                *repeated = 1;
+                *column += (square - 1); // column set to column + square - 1, which means the starting point is now the last position informed and the next squares will be placed following this starting point
+                break;
+            case 79: // if the square is filled with an 'O' (79 in ASCII), it's also invalid, then 'repeated' is set to 1, also showing this square is filled already and the same stuff as the ones done before are done in the lines below
                 *repeated = 1;
                 *column += (square - 1);
                 break;
-            case 79:
-                *repeated = 1;
-                *column += (square - 1);
-                break;
-            default:
-                computerBoard(*column + square, *row, layer);
-                *repeated = 0;
-                return *repeated;
+            default: // if the value at the square isn't either 83 or 79, then the position is free to use 
+                computerBoard(*column + square, *row, layer); // calls the function responsible for setting the boats on the board
+                *repeated = 0; // the position is obviously not repeated
+                return *repeated; // returns
             }
         }
 
-        else if(*fit == 0) {
-            *fit = 1;
-            *column += (square - 1);
+        else if(*fit == 0) { // if the condition below is false, it means the value informed either greater than 9, then this block of code runs
+            *fit = 1; // the variable fit is set to 1, indicating the value is greater then the maximum allowed
+            *column += (square - 1); // samething done in the lines above
         }
 
 
-        if ((*column - square) >= 0) {
+        if ((*column - square) >= 0) { // so, if it's a value greater then 9 or repeated, the program tries to fill and set the boat in the opposite direction as before 
             
-            switch (g_squares[*row][*column - square][layer]) {
+            switch (g_squares[*row][*column - square][layer]) { // the exact same thing done above is done here, the only difference is that now we're checking for positions in another direction
             case 83:
                 *repeated = 1;
                 break;
@@ -127,14 +117,14 @@ int computerRepeat(int* column, int* row, int layer, int axis, int* repeated, in
                 return *repeated;
             }
             
-            if (*repeated == 1) {
-                *repeated = 2;
-                return *repeated;
+            if (*repeated == 1) {// if up there we find another repetition of positions, then the boat can't be placed in de space it was suposed to be..
+                *repeated = 2; //... so the value of repeated is set to 2 ...
+                return *repeated; //... then it's returned, when the functions returns 2, all the board is reseted and new attempt to set all the boats will be made
             }
         }
 
-        else {
-            *repeated = 2;
+        else { // if the condition above is false, then the possible next position for the boat would be some value below 0, that's impossible...
+            *repeated = 2; // then, as the other if statement inside the last condition, it shows that the boat can't be placed in the space randomly chosed, so all the boats will be reseted
             return *repeated;
         }
         
@@ -158,7 +148,7 @@ int computerRepeat(int* column, int* row, int layer, int axis, int* repeated, in
             }
         }
 
-        else if (*fit == 0) {
+        else if (*fit == 0) { // same as before
             *fit = 1;
             *row += (square - 1);
         }
@@ -191,10 +181,9 @@ int computerRepeat(int* column, int* row, int layer, int axis, int* repeated, in
     } 
 }
 
-int setComputerBoard(int layer, string type)
+int setComputerBoard(int layer, string type) // set each boat in the board
 {
     Boats boat; // Creating object
-    //system("cls");
     int i, j, column, row, axis, quantity, length, repeated, fit;
     int* pcolumn = &column, * prow = &row, *prepeated = &repeated, *pfit =&fit; // pointers so the value of these variables can be changed and used in more than one function
   
@@ -213,16 +202,16 @@ int setComputerBoard(int layer, string type)
         fit = 0;
         for (i = 0; i < length; i++) { // this for loop is used for setting the correct amount of spaces that each boat has
             if (i == 0) { /// if its the first iteration, then.....
-                computerPositions(pcolumn, prow, -1); // gets the choosen space from the player
-                computerRepeat(pcolumn, prow, layer, axis, prepeated, i, pfit); // checks only for repetition of spaces, no need to check continuity in the first iteration
-                cPlayerBoard(1);
+                computerPositions(pcolumn, prow, -1); // generates random values for row and column
+                computerRepeat(pcolumn, prow, layer, axis, prepeated, i, pfit); // checks for repetitions and sets the boats on the boeard if everything is correct
+                //cPlayerBoard(1); // shows the board (only used while programming to check if everything is fine, during the game this function is not called)
                 if (repeated == 2){
                     return repeated;
                 } 
             }
             else { 
                 computerRepeat(pcolumn, prow, layer, axis, prepeated, i, pfit);
-                cPlayerBoard(1);
+                //cPlayerBoard(1);
                 if (repeated == 2) {
                     return repeated;
                 }
@@ -241,19 +230,12 @@ void computerMatrix()
     int layer, set_computer, i;
     layer = 1;
     for (i = 0; i < 5; i++) {
-        lockBoat(1);
+        lockBoat(1); // lock the boats as explained before
         set_computer = setComputerBoard(layer, types[i]); // setting the different boats on the board, by using the values on the 'types' array, the objects are created and each one has its characterists of length and quantity
-        //system("pause");
         if (set_computer == 2) {
             i = -1;
             matrix();
-        }cPlayerBoard(1);
-    } lockBoat(1); 
+        }//cPlayerBoard(1);
+    } lockBoat(1); //cPlayerBoard(1);
      
 }
-
-/*
-write a function to lock the older boats by turning their values to another thing different from 'O', then, if a new boat finds it, it is unable to recognize that part as a part of
-itself. After all boats are set, the values are again converted to 'O'.
-Anothar way of doing that is, instead of turning the boats to something differente from 'O', set the positions first to something already different and then set everything to 'O'.
-*/

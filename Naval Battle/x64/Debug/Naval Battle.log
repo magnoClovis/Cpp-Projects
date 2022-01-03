@@ -1,3 +1,8 @@
-﻿  computer_game.cpp
-D:\clovi\Estudos\Repositórios\Cpp-Projects\Naval Battle\computer_game.cpp(192): warning C4715: 'computerRepeat': no todas las rutas de acceso de control devuelven un valor
+﻿  Naval Battle.cpp
+D:\clovi\Estudos\Repositórios\Cpp-Projects\Naval Battle\player.h(14,5): warning C4273: '_getch': vinculación de DLL incoherente
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\ucrt\conio.h(411,45): message : vea la definición anterior de '_getch'
+D:\clovi\Estudos\Repositórios\Cpp-Projects\Naval Battle\Naval Battle.cpp(28,15): warning C4244: 'argumento': conversión de 'time_t' a 'unsigned int'; posible pérdida de datos
+  computer_game.cpp
+  Generando código...
+D:\clovi\Estudos\Repositórios\Cpp-Projects\Naval Battle\computer_game.cpp(182): warning C4715: 'computerRepeat': no todas las rutas de acceso de control devuelven un valor
   Naval Battle.vcxproj -> D:\clovi\Estudos\Repositórios\Cpp-Projects\Naval Battle\x64\Debug\Naval Battle.exe

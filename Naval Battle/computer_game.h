@@ -9,7 +9,6 @@ using namespace std;
 
 
 int boardPC(int column, int row, int layer);
-void clearBoardComputer(int column, int row, int layer);
 void computerMatrix();
 int setComputerBoard(int layer, string type);
 void lockBoat(int layer);
