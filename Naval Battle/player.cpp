@@ -114,7 +114,7 @@ int _getch() {// This function is responsible to get the inputs from the players
 void positions(int* column, int* row) { // In this function it is used pointers to modify the values of rows and columns
     cout << "Type a COLUMN using a letter from A to J.\n";
     *column = _getch();
-    while (*column < 65 || *column>74 && (*column < 97 || *column>106)) // Checks if the input is a letter between A and J
+    while (*column < 65 || *column>74 && (*column < 97 || *column>106)) // Checks if the input is a letter between A and J or a and j
     {
         cout << "Input a valid option!!\n";;
         *column = _getch();
@@ -134,7 +134,7 @@ int repeat(int* column, int* row, int layer) { // This function repeats the code
 
     bool repeated;
     repeated = false;
-    while (g_squares[*row][*column][layer] == 79) // Verifies if the space is already filled with the letter 'O' (79 in ASCII)
+    while (g_squares[*row][*column][layer] == g_set_boat || g_squares[*row][*column][layer] == g_boat) // Verifies if the space is already filled with the letter 'O' (79 in ASCII)
     {
         playerBoard(layer);
         cout << "Choose a position that has not been choosen yet!!\n";
@@ -145,22 +145,22 @@ int repeat(int* column, int* row, int layer) { // This function repeats the code
     return repeated;
 }
 
-bool vertical(int* column, int* row, int layer) { // Here it is verified if the input of the boat on the board is in vertical
-    bool vert = 0;
+int vertical(int* column, int* row, int layer) { // Here it is verified if the input of the boat on the board is in vertical
+    int vert = 0;
     if (g_squares[*row - 1][*column][layer] == g_set_boat || g_squares[*row + 1][*column][layer] == g_set_boat) { // This condition verifies the continuity in the vertical axis
-        vert = true;
+        vert = 1;
         return vert;
     }
-    else { return false; }
+    else { return vert; }
 }
 
-bool horizontal(int* column, int* row, int layer) { // Here it is verified if the input of the boat on the board is in horizontal
-    bool horiz = 0;
+int horizontal(int* column, int* row, int layer) { // Here it is verified if the input of the boat on the board is in horizontal
+    int horiz = 0;
     if (g_squares[*row][*column - 1][layer] == g_set_boat || g_squares[*row][*column + 1][layer] == g_set_boat) { // This condition verifies the continuity in the horizontal axis
-        horiz = true;
+        horiz = 1;
         return horiz;
     }
-    else { return false; }
+    else { return horiz; }
 }
 
 void clearBoard(int column, int row, int layer) { // This function is responsible for cleaning a specific space of the board by setting its value to zero if the player

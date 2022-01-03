@@ -1,2 +1,3 @@
 ﻿  computer_game.cpp
+D:\clovi\Estudos\Repositórios\Cpp-Projects\Naval Battle\computer_game.cpp(192): warning C4715: 'computerRepeat': no todas las rutas de acceso de control devuelven un valor
   Naval Battle.vcxproj -> D:\clovi\Estudos\Repositórios\Cpp-Projects\Naval Battle\x64\Debug\Naval Battle.exe
