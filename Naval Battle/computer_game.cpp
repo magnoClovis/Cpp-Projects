@@ -11,7 +11,6 @@
 
 using namespace std;
 
-
 int computerBoard(int column, int row, int layer)
 {
     // This function changes an element on the matrix "g_squares" and shows what the changes did on the table
@@ -21,16 +20,6 @@ int computerBoard(int column, int row, int layer)
     }
     g_squares[row][column][layer] = g_set_boat;
     return 0;
-}
-
-void lockBoat(int layer) { // This function is responsible to temporally lock the already defined boats and make them different from the others in the future
-    for (int i = 0; i < 10; i++) {
-        for (int j = 0; j < 10; j++) {
-            if (g_squares[j][i][layer] == g_set_boat) { // When some boat is set, first it is given the character on 'g_set_boat', then after informing all spaces from a boat, the character on its position is changed
-                g_squares[j][i][layer] = g_boat;        // to another one, so the next boats don't recognize the others already defined as parts of itself because the characters are different.
-            }
-        }
-    }
 }
 
 void computerPositions(int* column, int* row, int axis) { // In this function it is used pointers to modify the values of rows and columns according to the axis
