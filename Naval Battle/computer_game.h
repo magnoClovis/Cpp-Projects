@@ -9,5 +9,6 @@ using namespace std;
 
 
 void computerMatrix();
+void computerGame();
 #endif
 

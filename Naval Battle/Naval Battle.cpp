@@ -27,7 +27,7 @@ int main()
 {   
     srand(time(0));
     char against; // agains a person or the computer
-    matrix(); // starting a 3D matrix full of zeros
+    matrix(3); // starting a 3D matrix full of zeros
     playerBoard(0); // shows the player one's board on the screen
     against = SetPlayer(0); // set the position of the boats on the player one's board
     //against = 'b';
@@ -39,6 +39,7 @@ int main()
     } 
     else if (against == 'B' || against == 'b') {
         computerMatrix();
+        computerGame();
     } 
 
     return 0;

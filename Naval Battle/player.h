@@ -7,11 +7,14 @@ using namespace std;
 
 
 
-void matrix();
+void matrix(int layer);
 void playerBoard(int layer);
 char SetPlayer(int layer);
 unsigned int randomValues();
 void lockBoat(int layer);
 void game(unsigned int r);
-
+void gameBoard(int layer);
+int playerOneAttack(int layer, int* attack, int computer);
+int winner(int layer);
+void gameOver(int layer);
 #endif

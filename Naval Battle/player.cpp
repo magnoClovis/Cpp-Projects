@@ -9,26 +9,50 @@
 
 using namespace std;
 
-void matrix()
+void matrix(int layer)
 {
     // This function is responsible to generate and print a matrix full of zeros.
     // This matrix will be used to record the boats and ships positions for the game.
     int i, j, k; // 'i' represents the lines and 'j' the columns.
-    
-    for (k = 0; k < 2; k++) {
-        if (k == 1) { cout << ("\n"); }
+    if (layer == 3) {
+        for (k = 0; k < 2; k++) {
+            if (k == 1) { cout << ("\n"); }
 
+            for (i = 0; i < 10; i++) {
+                j = 0;
+                while (j < 10) {
+                    g_squares[i][j][k] = 48; // 48 == 0(zero) in ASCII table
+                    //cout << g_squares[i][j][c] << " "; // if for some reason it's necessary to take a look at the matrix of zeros, then uncomment this line and the othes cout below
+                    j++;
+                }
+                //cout << endl;
+            }
+        }
+        //cout << endl;
+    }
+    else if (layer == 1) {
+            for (i = 0; i < 10; i++) {
+                j = 0;
+                while (j < 10) {
+                    g_squares[i][j][layer] = 48; // 48 == 0(zero) in ASCII table
+                    //cout << g_squares[i][j][c] << " "; // if for some reason it's necessary to take a look at the matrix of zeros, then uncomment this line and the othes cout below
+                    j++;
+                }
+                //cout << endl;
+        }
+    }
+    else if (layer == 2) {
         for (i = 0; i < 10; i++) {
             j = 0;
             while (j < 10) {
-                g_squares[i][j][k] = 48; // 48 == 0(zero) in ASCII table
+                g_squares[i][j][layer] = 48; // 48 == 0(zero) in ASCII table
                 //cout << g_squares[i][j][c] << " "; // if for some reason it's necessary to take a look at the matrix of zeros, then uncomment this line and the othes cout below
                 j++;
             }
             //cout << endl;
         }
     }
-   //cout << endl;
+
 }
 
 void showBoard()
@@ -431,20 +455,30 @@ void gameOver(int layer) { // screens the boards after a win showing all the hit
     }
 }
 
-void playerOneAttack(int layer, int* attack, int* win) { // fuctions played when player one attacks
-    int column, row;
+int playerOneAttack(int layer, int* attack, int computer) { // fuctions played when player one attacks
+    int column, row, win;
     int* pcolumn = &column, * prow = &row;
     cout << "It's Player 1's turn!\n";
     gameBoard(layer); // shows player 2's board on the screen
-    cout << "Choose the square to attack on Player 2's board. \n";
+    if (computer == 0) {
+        cout << "Choose the square to attack on Player 2's board. \n";
+    }
+    else {
+        cout << "Choose the square to attack on the Computer's board. \n";
+    }
     positions(pcolumn, prow); // gets the position to attack
     *attack = boardAttack(pcolumn, prow, layer); // attacks
-    *win = winner(layer); // checks for wins
-    if (*win == 1) // if there's a win, then...
+    win = winner(layer); // checks for wins
+    if (win == 1) // if there's a win, then...
     {
         system("cls");
         cout << "---------PLAYER 1 WON THE GAME!!!---------\n";
-        cout << "PLAYER 2'S BOARD\n\n";
+        if (computer == 0) {
+            cout << "PLAYER 2'S BOARD\n\n";
+        }
+        else {
+            cout << "COMPUTER'S BOARD\n\n";
+        }
         gameOver(1);
         cout << endl;
         system("pause");
@@ -452,18 +486,19 @@ void playerOneAttack(int layer, int* attack, int* win) { // fuctions played when
         gameOver(0);
         system("pause");
     }
+    return win;
 }
 
-void playerTwoAttack(int layer, int* attack, int* win) { // fuctions played when player two attacks, the same used in the lest function is used here, but for the player 2
-    int column, row;
+int playerTwoAttack(int layer, int* attack) { // fuctions played when player two attacks, the same used in the lest function is used here, but for the player 2
+    int column, row, win;
     int* pcolumn = &column, * prow = &row;
     cout << "It's Player 2's turn!\n";
     gameBoard(layer);
     cout << "Choose the square to attack on Player 1's board. \n";
     positions(pcolumn, prow);
     *attack = boardAttack(pcolumn, prow, layer);
-    *win = winner(layer);
-    if (*win == 1)
+    win = winner(layer);
+    if (win == 1)
     {
         system("cls");
         cout << "---------PLAYER 2 WON THE GAME!!!---------\n";
@@ -475,6 +510,7 @@ void playerTwoAttack(int layer, int* attack, int* win) { // fuctions played when
         gameOver(0);
         system("pause");
     }
+    return win;
 }
 
 void game(unsigned int r) // this function is where the game starts after the players set all the boats on the board
@@ -494,7 +530,7 @@ void game(unsigned int r) // this function is where the game starts after the pl
             while (attack == 1) // while the player one hits a boat, then this loop keep on running
             {
                 layer = 1;
-                playerOneAttack(layer, pattack, pwin);
+                win = playerOneAttack(layer, pattack, 0);
                 if (win == 1) {
                     return;
                 }
@@ -503,7 +539,7 @@ void game(unsigned int r) // this function is where the game starts after the pl
             while (attack == 1) // same for player two
             {
                 layer = 0;
-                playerTwoAttack(layer, pattack, pwin);
+                win = playerTwoAttack(layer, pattack);
                 if (win == 1) {
                     return;
                 }
@@ -522,18 +558,17 @@ void game(unsigned int r) // this function is where the game starts after the pl
             while (attack == 1)
             {
                 layer = 0;
-                playerTwoAttack(layer, pattack, pwin);
+                win = playerTwoAttack(layer, pattack);
                 if (win == 1) {
                     return;
                 }
             }
 
             attack = 1;
-            attack = 1;
             while (attack == 1)
             {
                 layer = 1;
-                playerOneAttack(layer, pattack, pwin);
+                win = playerOneAttack(layer, pattack, 0);
                 if (win == 1) {
                     return;
                 }

@@ -212,6 +212,55 @@ int setComputerBoard(int layer, string type) // set each boat in the board
     return 0;
 }
 
+int attackPC(int *hit_or_miss)
+{
+    int column, row, win, layer;
+    layer = 0;
+    win = 0;
+    while (*hit_or_miss == 1)
+    {
+        column = randomValues();
+        row = randomValues();
+        if (g_squares[row][column][layer] == g_boat)// 'b' represents the lines and 'a' the columns
+        {
+            system("cls");
+            g_squares[row][column][layer] = g_fire;
+            gameBoard(0);
+            cout << "\nCOMPUTER HIT A BOAT!!";
+            printf("\nBOAT ATTACKED ON POSITION: %c%d\n", column + 65, row);
+            system("pause");
+            system("cls");
+            win = winner(0);
+            if (win == 1) {
+                system("cls");
+                cout << "---------COMPUTER WON THE GAME!!!---------\n";
+                cout << "COMPUTER'S BOARD\n\n";
+                gameOver(1);
+                cout << endl;
+                system("pause");
+                cout << "PLAYER 1'S BOARD\n\n";
+                gameOver(0);
+                system("pause");
+                return win;
+            }
+        }
+        else if (g_squares[row][column][layer] == g_fire || g_squares[row][column][layer] == g_water) {
+            *hit_or_miss = 1;
+        }
+        else {
+            system("cls");
+            g_squares[row][column][layer] = g_water;
+            gameBoard(0);
+            cout << "\nCOMPUTER DIDN'T HIT ANY BOAT!!";
+            printf("\nATTACKED POSITION: %c%d\n", column + 65, row);
+            system("pause");
+            system("cls");
+            *hit_or_miss = 0;
+        }
+    }
+    return win;
+}
+
 void computerMatrix()
 {
     cout << "----------------------------GENERATING POSITIONS FOR THE COMPUTER----------------------------\n\n";
@@ -223,8 +272,40 @@ void computerMatrix()
         set_computer = setComputerBoard(layer, types[i]); // setting the different boats on the board, by using the values on the 'types' array, the objects are created and each one has its characterists of length and quantity
         if (set_computer == 2) {
             i = -1;
-            matrix();
+            matrix(layer);
         }//cPlayerBoard(1);
     } lockBoat(1); //cPlayerBoard(1);
      
+}
+
+void computerGame() {
+    int layer, win, attack;
+    int *pattack = &attack;
+    win = 0;
+    attack = 1; // starts in 1 so some of the loops can start and keep running if the player hits a boat
+    cout << "Let's begin the game\n";
+    cout << "Player 1 is the first one to play." << endl;
+    system("pause");
+    system("cls");
+    layer = 1;
+    while (win == 0)
+    {
+        attack = 1;
+        while (attack == 1) // while the player one hits a boat, then this loop keep on running
+        {
+            win = playerOneAttack(layer, pattack, 1);
+            if (win == 1) {
+                return;
+            }
+        }
+        attack = 1;
+        while (attack == 1) // same for the computer
+        {
+            win = attackPC(pattack);
+            if (win == 1) {
+                return;
+            }
+        }
+
+    }
 }
