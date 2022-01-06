@@ -8,7 +8,7 @@
 using namespace std;
 
 
-void computerMatrix();
+void randomSet(int layer);
 void computerGame();
 #endif
 

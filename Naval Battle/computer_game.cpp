@@ -170,7 +170,7 @@ int computerRepeat(int* column, int* row, int layer, int axis, int* repeated, in
     } 
 }
 
-int setComputerBoard(int layer, string type) // set each boat in the board
+int setRandomBoard(int layer, string type) // set each boat in the board
 {
     Boats boat; // Creating object
     int i, j, column, row, axis, quantity, length, repeated, fit;
@@ -185,7 +185,6 @@ int setComputerBoard(int layer, string type) // set each boat in the board
     axis = randomValues() % 2; // axis = 0, horizontal  ######   axis = 1, vertical
 
     j = 0;
-    
     while (j < quantity) { // this first while loop stands for setting the correct quantity of each boat on the board
         repeated = 0;
         fit = 0;
@@ -216,7 +215,7 @@ int attackPC(int *hit_or_miss)
 {
     int column, row, win, layer;
     layer = 0;
-    win = 0;
+    win = winner(0);
     while (*hit_or_miss == 1)
     {
         column = randomValues();
@@ -228,10 +227,12 @@ int attackPC(int *hit_or_miss)
             gameBoard(0);
             cout << "\nCOMPUTER HIT A BOAT!!";
             printf("\nBOAT ATTACKED ON POSITION: %c%d\n", column + 65, row);
+            win = winner(0);
+            cout << endl << "REMAINING PARTS: " << win << endl;
             system("pause");
             system("cls");
             win = winner(0);
-            if (win == 1) {
+            if (win == 0) {
                 system("cls");
                 cout << "---------COMPUTER WON THE GAME!!!---------\n";
                 cout << "COMPUTER'S BOARD\n\n";
@@ -253,6 +254,8 @@ int attackPC(int *hit_or_miss)
             gameBoard(0);
             cout << "\nCOMPUTER DIDN'T HIT ANY BOAT!!";
             printf("\nATTACKED POSITION: %c%d\n", column + 65, row);
+            win = winner(0);
+            cout << endl << "REMAINING PARTS: " << win << endl;
             system("pause");
             system("cls");
             *hit_or_miss = 0;
@@ -261,40 +264,39 @@ int attackPC(int *hit_or_miss)
     return win;
 }
 
-void computerMatrix()
+void randomSet(int layer)
 {
-    cout << "----------------------------GENERATING POSITIONS FOR THE COMPUTER----------------------------\n\n";
     string types[] = { "submarine", "tug ship", "destroyer", "cruiser", "aircraft carrier"};
-    int layer, set_computer, i;
-    layer = 1;
-    for (i = 0; i < 5; i++) {
-        lockBoat(1); // lock the boats as explained before
-        set_computer = setComputerBoard(layer, types[i]); // setting the different boats on the board, by using the values on the 'types' array, the objects are created and each one has its characterists of length and quantity
+    int set_computer, i;
+    i = 0;
+    matrix(layer);
+    for (i; i < 5; i++) {
+        lockBoat(layer); // lock the boats as explained before
+        set_computer = setRandomBoard(layer, types[i]); // setting the different boats on the board, by using the values on the 'types' array, the objects are created and each one has its characterists of length and quantity
         if (set_computer == 2) {
             i = -1;
             matrix(layer);
-        }//cPlayerBoard(1);
-    } lockBoat(1); //cPlayerBoard(1);
-     
+        }//cPlayerBoard(layer);
+    } lockBoat(layer); //cPlayerBoard(layer);
 }
 
 void computerGame() {
     int layer, win, attack;
     int *pattack = &attack;
-    win = 0;
+    win = 1;
     attack = 1; // starts in 1 so some of the loops can start and keep running if the player hits a boat
     cout << "Let's begin the game\n";
     cout << "Player 1 is the first one to play." << endl;
     system("pause");
     system("cls");
     layer = 1;
-    while (win == 0)
+    while (win != 0)
     {
         attack = 1;
         while (attack == 1) // while the player one hits a boat, then this loop keep on running
         {
             win = playerOneAttack(layer, pattack, 1);
-            if (win == 1) {
+            if (win == 0) {
                 return;
             }
         }
@@ -302,7 +304,7 @@ void computerGame() {
         while (attack == 1) // same for the computer
         {
             win = attackPC(pattack);
-            if (win == 1) {
+            if (win == 0) {
                 return;
             }
         }

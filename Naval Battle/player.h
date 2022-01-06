@@ -9,7 +9,8 @@ using namespace std;
 
 void matrix(int layer);
 void playerBoard(int layer);
-char SetPlayer(int layer);
+char randomOrNot(int layer);
+//void SetPlayer(int layer);
 unsigned int randomValues();
 void lockBoat(int layer);
 void game(unsigned int r);

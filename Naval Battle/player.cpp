@@ -5,6 +5,7 @@
 
 #include "variables.h"
 #include "player.h"
+#include "computer_game.h"
 #include "boats.h"
 
 using namespace std;
@@ -14,7 +15,7 @@ void matrix(int layer)
     // This function is responsible to generate and print a matrix full of zeros.
     // This matrix will be used to record the boats and ships positions for the game.
     int i, j, k; // 'i' represents the lines and 'j' the columns.
-    if (layer == 3) {
+    if (layer == 2) {
         for (k = 0; k < 2; k++) {
             if (k == 1) { cout << ("\n"); }
 
@@ -30,7 +31,7 @@ void matrix(int layer)
         }
         //cout << endl;
     }
-    else if (layer == 1) {
+    else if (layer == 0) {
             for (i = 0; i < 10; i++) {
                 j = 0;
                 while (j < 10) {
@@ -41,7 +42,7 @@ void matrix(int layer)
                 //cout << endl;
         }
     }
-    else if (layer == 2) {
+    else if (layer == 1) {
         for (i = 0; i < 10; i++) {
             j = 0;
             while (j < 10) {
@@ -80,7 +81,13 @@ void showBoard()
 void playerBoard(int layer) // This function is responsible to print the board on the screen during the game, allowing the player to visualize the game board
 {
     int i, j;
-    cout << "Welcome to Naval Battle!! First we are setting the position for each boat on the board!" << endl << endl;
+    system("cls");
+    if (layer == 0) {
+        cout << "Welcome to Naval Battle!! First we are setting the position for each boat on the board!" << endl << endl;
+    }
+    else if (layer == 1) {
+        cout << "Now let's set Player's 2 board!! Follow the instructions to set the boats on the board." << endl << endl;
+    }
     cout << ("     A   B   C   D   E   F   G   H   I   J");
     cout << endl;
     for (i = 0; i < 10; i++) {
@@ -305,41 +312,42 @@ void setBoat(int layer, string type) { // Here the boats are set in the board, f
     }
 }
 
-char SetPlayer(int layer) // This functions stands for letting both players set all the boats on the board
-{
+char chooseOpponent() {
     char a;
+    system("cls");
+    cout << "The game will be:\nA. Against a person\nB. Against the computer\n"; // choose if the game will be played against a person or a computer
+    a = _getch();
+    while (true)
+    {
+        if (a == 'A' || a == 'a')
+        {
+            return a;
+        }
+        if (a == 'B' || a == 'b')
+        {
+            return a;
+        }
+        else
+        {
+            cout << "Input a valid option!!\n";
+            cout << "The game will be:\nA. Against a person\nB. Against the computer\n";
+            a = _getch();
+        }
+    }
+}
+
+void SetPlayer(int layer) // This functions stands for letting both players set all the boats on the board
+{
     string types[] = { "submarine", "tug ship", "destroyer", "cruiser", "aircraft carrier" }; //listing all the existing boats so then it can be used in the 'setBoat' function
     cout << "Player " << layer + 1 << ", please follow the instructions to set the position for each boat." << endl;
 
-    for (int i = 0; i < 1; i++) {
+    for (int i = 0; i < 5; i++) {
         setBoat(layer, types[i]); // setting the different boats on the board, by using the values on the 'types' array, the objects are created and each one has its characterists of length and quantity
     }
 
     cout << "Perfect! All boats have been set!\n\n";
     system("pause");
     system("cls");
-
-    if (layer == 0) {
-        cout << "The game will be:\nA. Against a person\nB. Against the computer\n"; // choose if the game will be played against a person or a computer
-        a = _getch();
-        while (true)
-        {
-            if (a == 'A' || a == 'a')
-            {
-                return a;
-            }
-            if (a == 'B' || a == 'b')
-            {
-                return a;
-            }
-            else
-            {
-                cout << "Input a valid option!!\n";
-                cout << "The game will be:\nA. Against a person\nB. Against the computer\n";
-                a = _getch();
-            }
-        }
-    }
 }
 
 void gameBoard(int layer) // This functions shows the changes on the board during the game
@@ -382,19 +390,20 @@ unsigned int randomValues() { // getting positive random values for both: choosi
 }
 
 int winner(int layer) { // checks if someone have won the game
-    int i, j;
+    int i, j, remaining;
     bool  O;
     O = false;
+    remaining = 0;
     for (i = 0; i < 10; i++)
     {
         for (j = 0; j < 10; j++)
         {
             if (g_squares[i][j][layer] == 'O') { // a player wins if its opponent board has no "O"s, which indicates the player has found all the boats of their opponent
-                return 0; // if an 'O' is found, then theres no win, then, return 0
+                remaining++;// if an 'O' is found, then theres no win, then, return 0
             }
         }
     }
-    return 1; // if no 'O' in found, it shows that all the boats have been found and so there's a win, then, the code will end here in this line and '1' will be returned
+    return remaining; // if no 'O' in found, it shows that all the boats have been found and so there's a win, then, the code will end here in this line and '1' will be returned
 }
 
 int boardAttack(int* column, int* row, int layer) {
@@ -466,10 +475,12 @@ int playerOneAttack(int layer, int* attack, int computer) { // fuctions played w
     else {
         cout << "Choose the square to attack on the Computer's board. \n";
     }
+    win = winner(layer);
+    cout << endl << "REMAINING PARTS: " << win << endl;
     positions(pcolumn, prow); // gets the position to attack
     *attack = boardAttack(pcolumn, prow, layer); // attacks
     win = winner(layer); // checks for wins
-    if (win == 1) // if there's a win, then...
+    if (win == 0) // if there's a win, then...
     {
         system("cls");
         cout << "---------PLAYER 1 WON THE GAME!!!---------\n";
@@ -495,43 +506,101 @@ int playerTwoAttack(int layer, int* attack) { // fuctions played when player two
     cout << "It's Player 2's turn!\n";
     gameBoard(layer);
     cout << "Choose the square to attack on Player 1's board. \n";
+    win = winner(layer);
+    cout << endl << "REMAINING PARTS: " << win << endl;
     positions(pcolumn, prow);
     *attack = boardAttack(pcolumn, prow, layer);
     win = winner(layer);
-    if (win == 1)
+    if (win == 0)
     {
         system("cls");
         cout << "---------PLAYER 2 WON THE GAME!!!---------\n";
         cout << "PLAYER 1'S BOARD\n\n";
-        gameOver(1);
+        gameOver(0);
         cout << endl;
         system("pause");
         cout << "PLAYER 2'S BOARD\n\n";
-        gameOver(0);
+        gameOver(1);
         system("pause");
     }
     return win;
+}
+
+char randomOrNot(int layer) {
+    int option, verif;
+    char against;
+    cout << "How do you want to enter the positions for the boat?" << endl << "1. Manually" << endl << "2. Randomly" << endl;
+    cin >> option;
+    while (true) {
+        if (option == 1) {
+            SetPlayer(layer); // set the position of the boats on the player one's board
+            if (layer == 1) {
+                return 'a';
+            }
+            against = chooseOpponent();
+            return against;
+        }
+        else if (option == 2) {
+            randomSet(layer);
+            playerBoard(layer);
+            cout << "Input '1' if you want to keep this board, '2' if you want to generate another board or '3' to input the boats manually." << endl;
+            cin >> verif;
+
+            while (true) {
+                if (verif == 1) {
+                    if (layer == 0) {
+                        against = chooseOpponent();
+                        return against;
+                    }
+                    else {
+                        return 'a';
+                    }
+                    
+                }
+                else if (verif == 2) {
+                    option = 2;
+                    break;
+                }
+                else if (verif == 3) {
+                    option = 1;
+                    matrix(layer);
+                    break;
+                }
+                else {
+                    cout << "Input a valid value! Type '1' if you want to keep this board, '2' if you want to generate another board or '3' to input the positions manually.";
+                    cin >> verif;
+                }
+            } 
+        }
+        else {
+            cout << "Input a valid value! Type '1' for informing the positions mannualy and '2' for randomly set all the boats on the board.";
+            cin >> option;
+        }
+    }
 }
 
 void game(unsigned int r) // this function is where the game starts after the players set all the boats on the board
 {
     int layer, win, attack;
     int* pwin = &win, * pattack = &attack;
-    win = 0;
+    win = 1;
     attack = 1; // starts in 1 so some of the loops can start and keep running if the player hits a boat
-    cout << "Let's begin the game\n";
+    system("cls");
+    cout << "Let's begin the game!\n" << endl;
+    cout << "Here are the symbols used on the board during the game. Try not to forget their meanings when you see them!!\n" << endl << "'X': Congratulations! You've found a boat on that square!" << endl << "'.': Nothing here! You haven't found hit anything, good luck next time!" << endl << endl;
+    system("pause");
     if (r == 0) {
-        cout << "Player 1 is the first one to play." << endl;
+        cout << endl << endl << "Player 1 will be the first one to play." << endl;
         system("pause");
         system("cls");
-        while (win == 0)
+        while (win != 0)
         {
             attack = 1;
             while (attack == 1) // while the player one hits a boat, then this loop keep on running
             {
                 layer = 1;
                 win = playerOneAttack(layer, pattack, 0);
-                if (win == 1) {
+                if (win == 0) {
                     return;
                 }
             }
@@ -540,7 +609,7 @@ void game(unsigned int r) // this function is where the game starts after the pl
             {
                 layer = 0;
                 win = playerTwoAttack(layer, pattack);
-                if (win == 1) {
+                if (win == 0) {
                     return;
                 }
             }
@@ -549,17 +618,17 @@ void game(unsigned int r) // this function is where the game starts after the pl
 
     }
     else if (r == 1) { // the same happens here when player 2 is the first one to play
-        cout << "Player 2 is the first one to play." << endl;
+        cout << "Player 2 will be the first one to play." << endl;
         system("pause");
         system("cls");
-        while (win == 0)
+        while (win != 0)
         {
             attack = 1;
             while (attack == 1)
             {
                 layer = 0;
                 win = playerTwoAttack(layer, pattack);
-                if (win == 1) {
+                if (win == 0) {
                     return;
                 }
             }
@@ -569,7 +638,7 @@ void game(unsigned int r) // this function is where the game starts after the pl
             {
                 layer = 1;
                 win = playerOneAttack(layer, pattack, 0);
-                if (win == 1) {
+                if (win == 0) {
                     return;
                 }
             }
