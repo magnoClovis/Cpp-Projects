@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "ProjectMap": {
+    "0f4c7eb6-9017-48b3-b9b8-ec13ec183b6d": {
+      "ProjectGuid": "0f4c7eb6-9017-48b3-b9b8-ec13ec183b6d",
+      "DisplayName": "NavalBattle",
+      "ColorIndex": 0
+    }
+  },
+  "NextColorIndex": 1
+}

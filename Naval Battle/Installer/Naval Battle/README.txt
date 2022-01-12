@@ -1,0 +1,1 @@
+Files for instalation are inside the "Debug" folder. Both '.msi' and '.exe' files can be used for installing the game.
