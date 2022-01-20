@@ -15,7 +15,6 @@ public:
     int setLength(string type);
     virtual ~Boats();
     int setQtt(int length);
-protected:
 
 private:
     string type;

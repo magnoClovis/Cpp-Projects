@@ -3,6 +3,8 @@
 #include<windows.h>
 #include <random>
 #include <time.h>
+#include <windows.data.json.h>
+
 
 #include "variables.h"
 #include"computer_game.h"
