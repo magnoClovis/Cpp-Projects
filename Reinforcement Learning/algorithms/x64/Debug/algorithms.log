@@ -1,0 +1,15 @@
+﻿  algorithms.cpp
+D:\clovi\Estudos\Repositórios\Cpp-Projects\Reinforcement Learning\algorithms\algorithms.cpp(47,16): warning C4244: 'inicializando': conversión de 'int' a 'float'; posible pérdida de datos
+D:\clovi\Estudos\Repositórios\Cpp-Projects\Reinforcement Learning\algorithms\algorithms.cpp(49,19): warning C4244: 'inicializando': conversión de 'double' a 'int'; posible pérdida de datos
+D:\clovi\Estudos\Repositórios\Cpp-Projects\Reinforcement Learning\algorithms\algorithms.cpp(54,23): warning C4244: '-=': conversión de 'float' a '_Ty'; posible pérdida de datos
+          with
+          [
+              _Ty=int
+          ]
+D:\clovi\Estudos\Repositórios\Cpp-Projects\Reinforcement Learning\algorithms\algorithms.cpp(57,38): warning C4244: '=': conversión de 'int' a '_Ty'; posible pérdida de datos
+          with
+          [
+              _Ty=float
+          ]
+D:\clovi\Estudos\Repositórios\Cpp-Projects\Reinforcement Learning\algorithms\algorithms.cpp(100,36): warning C4305: 'inicializando': truncamiento de 'double' a 'float'
+  algorithms.vcxproj -> D:\clovi\Estudos\Repositórios\Cpp-Projects\Reinforcement Learning\algorithms\x64\Debug\algorithms.exe
