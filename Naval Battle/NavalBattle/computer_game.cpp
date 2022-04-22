@@ -172,43 +172,40 @@ int computerRepeat(int* column, int* row, int layer, int axis, int* repeated, in
     }
 }
 
-int setRandomBoard(int layer, string type) // set each boat in the board
+int setRandomBoard(int layer, Boats boats[]) // set each boat in the board
 {
-    Boats boat; // Creating object
     int i, j, column, row, axis, quantity, length, repeated, fit;
     int* pcolumn = &column, * prow = &row, * prepeated = &repeated, * pfit = &fit; // pointers so the value of these variables can be changed and used in more than one function
 
-    boat.setLength(type); // setting length characteristic for the object from the boat class
-    boat.setQtt(boat.length); // after setting the length, it is then set the quantity of that boat on the board
-
-    quantity = boat.quantity; // savig the quantity of boats in a variable
-    length = boat.length; // saving the lenght of the boats in another variable
-
     axis = randomValues() % 2; // axis = 0, horizontal  ######   axis = 1, vertical
+    for (int z = 0; z < 5; z++) {
+        quantity = boats[z].getQtt(); // savig the quantity of boats in a variable
+        length = boats[z].getLength(); // saving the lenght of the boats in another variable
 
-    j = 0;
-    while (j < quantity) { // this first while loop stands for setting the correct quantity of each boat on the board
-        repeated = 0;
-        fit = 0;
-        for (i = 0; i < length; i++) { // this for loop is used for setting the correct amount of spaces that each boat has
-            if (i == 0) { /// if its the first iteration, then.....
-                computerPositions(pcolumn, prow, -1); // generates random values for row and column
-                computerRepeat(pcolumn, prow, layer, axis, prepeated, i, pfit); // checks for repetitions and sets the boats on the boeard if everything is correct
-                //cPlayerBoard(1); // shows the board (only used while programming to check if everything is fine, during the game this function is not called)
-                if (repeated == 2) {
-                    return repeated;
+        j = 0;
+        while (j < quantity) { // this first while loop stands for setting the correct quantity of each boat on the board
+            repeated = 0;
+            fit = 0;
+            for (i = 0; i < length; i++) { // this for loop is used for setting the correct amount of spaces that each boat has
+                if (i == 0) { /// if its the first iteration, then.....
+                    computerPositions(pcolumn, prow, -1); // generates random values for row and column
+                    computerRepeat(pcolumn, prow, layer, axis, prepeated, i, pfit); // checks for repetitions and sets the boats on the boeard if everything is correct
+                    //cPlayerBoard(1); // shows the board (only used while programming to check if everything is fine, during the game this function is not called)
+                    if (repeated == 2) {
+                        return repeated;
+                    }
+                }
+                else {
+                    computerRepeat(pcolumn, prow, layer, axis, prepeated, i, pfit);
+                    //cPlayerBoard(1);
+                    if (repeated == 2) {
+                        return repeated;
+                    }
                 }
             }
-            else {
-                computerRepeat(pcolumn, prow, layer, axis, prepeated, i, pfit);
-                //cPlayerBoard(1);
-                if (repeated == 2) {
-                    return repeated;
-                }
-            }
+            axis = randomValues() % 2; // new axis for new boat
+            j++;
         }
-        axis = randomValues() % 2; // new axis for new boat
-        j++;
     }
     return 0;
 }
@@ -266,15 +263,14 @@ int attackPC(int* hit_or_miss)
     return win;
 }
 
-void randomSet(int layer)
+void randomSet(int layer, Boats* boats[])
 {
-    string types[] = { "submarine", "tug ship", "destroyer", "cruiser", "aircraft carrier" };
     int set_computer, i;
     i = 0;
     matrix(layer);
     for (i; i < 5; i++) {
         lockBoat(layer); // lock the boats as explained before
-        set_computer = setRandomBoard(layer, types[i]); // setting the different boats on the board, by using the values on the 'types' array, the objects are created and each one has its characterists of length and quantity
+        set_computer = setRandomBoard(layer, *boats); // setting the different boats on the board, by using the values on the 'types' array, the objects are created and each one has its characterists of length and quantity
         if (set_computer == 2) {
             i = -1;
             matrix(layer);

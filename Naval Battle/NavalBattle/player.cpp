@@ -233,82 +233,81 @@ void clearBoard(int column, int row, int layer) { // This function is responsibl
     }
 }
 
-void setBoat(int layer, string type) { // Here the boats are set in the board, for that it is used some of the functions above and, in order to help, objects from the 'Boats' class are created
-    Boats boat; // Creating object
+void setBoat(int layer, Boats boat[]) { // Here the boats are set in the board, for that it is used some of the functions above and, in order to help, objects from the 'Boats' class are created
     int i, j, column, row, quantity, length;
     int* pcolumn = &column, * prow = &row; // pointers so the value of these variables can be changed and used in more than one function
     bool repeated, horiz, vert; // bools for checking continuity and repetition of choosen squares while the player is setting the boats on the board
     bool* prepeated = &repeated; // pointer so the value of the boolean variable 'repeated' can be changed and used in more than one function
 
-    boat.setLength(type); // setting length characteristic for the object from the boat class
-    boat.setQtt(boat.length); // after setting the length, it is then set the quantity of that boat on the board
 
-    quantity = boat.quantity; // savig the quantity of boats in a variable
-    length = boat.length;// saving the lenght of the boats in another variable
 
     j = 0;
     horiz = 0, vert = 0, repeated = 1; // 0 for false and 1 for true
+    for (int z = 0; z < 5; z++) {
+        quantity = boat[z].getQtt(); // savig the quantity of boats in a variable
+        length = boat[z].getLength();// saving the lenght of the boats in another variable
+ 
+        while (j < quantity) { // this first while loop stands for setting the correct quantity of each boat on the board
+            for (i = 0; i < length; i++) { // this for loop is used for setting the correct amount of spaces that each boat has
 
-    while (j < quantity) { // this first while loop stands for setting the correct quantity of each boat on the board
-        for (i = 0; i < length; i++) { // this for loop is used for setting the correct amount of spaces that each boat has
-
-            cout << "Total of " << type << " on the board: " << j << endl << endl;
-            cout << type << ": You have " << quantity << " " << type << "! Each " << type << " occupies " << length << " squares on the board.\n";
-            positions(pcolumn, prow); // gets the choosen space from the player
-            if (i == 0) { /// if its the first iteration, then.....
-                repeated = repeat(pcolumn, prow, layer); // checks only for repetition of spaces, no need to check continuity in the first iteration
-            }
-
-            else if (i == 1) { // if it is the second iteration, then...
-                repeated = repeat(pcolumn, prow, layer); // first, check for repetition as before in the first iteration
-                if (repeated == 0) { // then check continuity and identify the axis (vertical or horizontal)
-                    horiz = horizontal(pcolumn, prow, layer); // horiz will be equal to 1 if the boat is horizontal on the board
-                    vert = vertical(pcolumn, prow, layer); // vert will be equal to 1 if the boat is vertical on the board
-
-                    while (horiz == 0 && vert == 0) { // while both horiz and vert are equal to 0, it shows that the boat isn't either in horizontal or vertical...
-                        system("cls");               // ...in other words, there's no continuity   
-                        clearBoard(column, row, layer); // erase the last square informed, since this position is invalid
-                        cout << "---------INVALID POSITION---------\nInput a position close to the last one.\n";
-                        positions(pcolumn, prow); // gets another position
-                        repeated = repeat(pcolumn, prow, layer); // checks again for repetition of spaces
-                        horiz = horizontal(pcolumn, prow, layer); // checks continuity on horizontal again
-                        vert = vertical(pcolumn, prow, layer); // checks continuity on vertical again
-                    }
-                    system("cls");
-                    board(column, row, layer); // if everything is ok, then set the position on the board and then show it on the screen.
+                cout << "Total of " << boat[i].getType() << " on the board: " << j << endl << endl;
+                cout << boat[i].getType() << ": You have " << quantity << " " << boat[i].getType() << "! Each " << boat[i].getType() << " occupies " << length << " squares on the board.\n";
+                positions(pcolumn, prow); // gets the choosen space from the player
+                if (i == 0) { /// if its the first iteration, then.....
+                    repeated = repeat(pcolumn, prow, layer); // checks only for repetition of spaces, no need to check continuity in the first iteration
                 }
-            }
 
-            else { // after the second loop
-                repeated = repeat(pcolumn, prow, layer); // again, first set for repetitions
-                // after getting the 2 later squares on the board, we already know whether the boat is on the horizontal or vertical axis and the user must finish input the boat on the same axis
-                if (horiz == 1) { // if the horizontal axis is the axis choosed for the player, then this if block will be executed and it looks for horizontal continuity
-                    horiz = horizontal(pcolumn, prow, layer); // checks for horizontal continuity
-                    while (horiz == 0) { // while the user keeps on inputing invalid positions, either because its far from the last ones, either bcz it's not on the same axis, this loop runs
+                else if (i == 1) { // if it is the second iteration, then...
+                    repeated = repeat(pcolumn, prow, layer); // first, check for repetition as before in the first iteration
+                    if (repeated == 0) { // then check continuity and identify the axis (vertical or horizontal)
+                        horiz = horizontal(pcolumn, prow, layer); // horiz will be equal to 1 if the boat is horizontal on the board
+                        vert = vertical(pcolumn, prow, layer); // vert will be equal to 1 if the boat is vertical on the board
+
+                        while (horiz == 0 && vert == 0) { // while both horiz and vert are equal to 0, it shows that the boat isn't either in horizontal or vertical...
+                            system("cls");               // ...in other words, there's no continuity   
+                            clearBoard(column, row, layer); // erase the last square informed, since this position is invalid
+                            cout << "---------INVALID POSITION---------\nInput a position close to the last one.\n";
+                            positions(pcolumn, prow); // gets another position
+                            repeated = repeat(pcolumn, prow, layer); // checks again for repetition of spaces
+                            horiz = horizontal(pcolumn, prow, layer); // checks continuity on horizontal again
+                            vert = vertical(pcolumn, prow, layer); // checks continuity on vertical again
+                        }
                         system("cls");
-                        clearBoard(column, row, layer); // clear the last invalid position informed
-                        cout << "---------INVALID POSITION---------\nInput a position close to the last one and in the same row.\n";
-                        positions(pcolumn, prow); // asks for other values
-                        repeated = repeat(pcolumn, prow, layer); // checks for repetitions
-                        horiz = horizontal(pcolumn, prow, layer); // checks for horizontal continuity again (note that for this if block the value of horizontal can be changed, but the vertical can't)
+                        board(column, row, layer); // if everything is ok, then set the position on the board and then show it on the screen.
                     }
                 }
 
-                else { // same logic as before, but for the vertical axis
-                    vert = vertical(pcolumn, prow, layer);
-                    while (vert == 0) {
-                        system("cls");
-                        clearBoard(column, row, layer);
-                        cout << "---------INVALID POSITION---------\nInput a position close to the last one and in the same column .\n";
-                        positions(pcolumn, prow);
-                        repeated = repeat(pcolumn, prow, layer);
-                        vert = vertical(pcolumn, prow, layer); // again, here the value of vertical can be changed, but the horizontal can't
+                else { // after the second loop
+                    repeated = repeat(pcolumn, prow, layer); // again, first set for repetitions
+                    // after getting the 2 later squares on the board, we already know whether the boat is on the horizontal or vertical axis and the user must finish input the boat on the same axis
+                    if (horiz == 1) { // if the horizontal axis is the axis choosed for the player, then this if block will be executed and it looks for horizontal continuity
+                        horiz = horizontal(pcolumn, prow, layer); // checks for horizontal continuity
+                        while (horiz == 0) { // while the user keeps on inputing invalid positions, either because its far from the last ones, either bcz it's not on the same axis, this loop runs
+                            system("cls");
+                            clearBoard(column, row, layer); // clear the last invalid position informed
+                            cout << "---------INVALID POSITION---------\nInput a position close to the last one and in the same row.\n";
+                            positions(pcolumn, prow); // asks for other values
+                            repeated = repeat(pcolumn, prow, layer); // checks for repetitions
+                            horiz = horizontal(pcolumn, prow, layer); // checks for horizontal continuity again (note that for this if block the value of horizontal can be changed, but the vertical can't)
+                        }
+                    }
+
+                    else { // same logic as before, but for the vertical axis
+                        vert = vertical(pcolumn, prow, layer);
+                        while (vert == 0) {
+                            system("cls");
+                            clearBoard(column, row, layer);
+                            cout << "---------INVALID POSITION---------\nInput a position close to the last one and in the same column .\n";
+                            positions(pcolumn, prow);
+                            repeated = repeat(pcolumn, prow, layer);
+                            vert = vertical(pcolumn, prow, layer); // again, here the value of vertical can be changed, but the horizontal can't
+                        }
                     }
                 }
             }
+            lockBoat(layer);
+            j++;
         }
-        lockBoat(layer);
-        j++;
     }
 }
 
@@ -336,13 +335,12 @@ char chooseOpponent() {
     }
 }
 
-void SetPlayer(int layer) // This functions stands for letting both players set all the boats on the board
+void SetPlayer(int layer, Boats* boats[]) // This functions stands for letting both players set all the boats on the board
 {
-    string types[] = { "submarine", "tug ship", "destroyer", "cruiser", "aircraft carrier" }; //listing all the existing boats so then it can be used in the 'setBoat' function
     cout << "Player " << layer + 1 << ", please follow the instructions to set the position for each boat." << endl;
 
     for (int i = 0; i < 5; i++) {
-        setBoat(layer, types[i]); // setting the different boats on the board, by using the values on the 'types' array, the objects are created and each one has its characterists of length and quantity
+        setBoat(layer, boats[i]); // setting the different boats on the board, by using the values on the 'types' array, the objects are created and each one has its characterists of length and quantity
     }
 
     cout << "Perfect! All boats have been set!\n\n";
@@ -526,14 +524,14 @@ int playerTwoAttack(int layer, int* attack) { // fuctions played when player two
     return win;
 }
 
-char randomOrNot(int layer) {
+char randomOrNot(int layer, Boats* boats[]) {
     int option, verif;
     char against;
     cout << "How do you want to enter the positions for the boat?" << endl << "1. Manually" << endl << "2. Randomly" << endl;
     cin >> option;
     while (true) {
         if (option == 1) {
-            SetPlayer(layer); // set the position of the boats on the player one's board
+            SetPlayer(layer, boats); // set the position of the boats on the player one's board
             if (layer == 1) {
                 return 'a';
             }
@@ -541,7 +539,7 @@ char randomOrNot(int layer) {
             return against;
         }
         else if (option == 2) {
-            randomSet(layer);
+            randomSet(layer, boats);
             playerBoard(layer);
             cout << "Input '1' if you want to keep this board, '2' if you want to generate another board or '3' to input the boats manually." << endl;
             cin >> verif;
@@ -644,4 +642,5 @@ void game(unsigned int r) // this function is where the game starts after the pl
             }
         }
     }
-}
+}  
+

@@ -10,14 +10,19 @@ class Boats
 {
 public:
     Boats();
-    int length; int quantity;
-    void boats(string type);
-    int setLength(string type);
     virtual ~Boats();
-    int setQtt(int length);
+    void boats(string type);
+    void setType(string type);
+    int getLength();
+    string getType();
+    int getQtt();
+    
 
 private:
     string type;
+    int length; int quantity;
+    void setLength(string type);
+    void setQtt(int length);
 
 
 };

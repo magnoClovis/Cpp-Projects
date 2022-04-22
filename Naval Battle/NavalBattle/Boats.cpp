@@ -1,10 +1,23 @@
 #include "Boats.h"
 #include <string>
-
+#include <iostream>
 using namespace std;
 Boats::Boats()
 {
-    //ctor
+    length = 0;
+    quantity = 0;
+} 
+
+int Boats::getLength() {
+    return this->length;
+}
+
+int Boats::getQtt() {
+    return this->quantity;
+}
+
+string Boats::getType() {
+    return this->type;
 }
 
 void  Boats::boats(string type) {
@@ -12,58 +25,93 @@ void  Boats::boats(string type) {
 }
 
 /*
-Each boat has different sizes.
+Each boat have different sizes.
 Here it is decided the size of each boat according to the name informed as a parameter
 */
 
-int Boats::setLength(string type) {
+void Boats::setLength(string type) {
     if (type == "submarine") {
-        return length = 1;
+        length = 1;
+        setQtt(length);
     }
     else if (type == "tug ship") {
-        return length = 2;
+        length = 2;
+        setQtt(length);
     }
 
     else if (type == "destroyer") {
-        return length = 3;
+        length = 3;
+        setQtt(length);
     }
 
     else if (type == "cruiser") {
-        return length = 4;
+        length = 4;
+        setQtt(length);
     }
 
     else if (type == "aircraft carrier") {
-        return length = 5;
+        length = 5;
+        setQtt(length);
     }
-    else { return length = 0; }
+    else { length = 0; }
 }
 
-int Boats::setQtt(int length) {
+void Boats::setQtt(int length) {
     switch (length) {
     case 1:
-        return quantity = 3;
+        quantity = 3;
         break;
     case 2:
-        return quantity = 2;
+        quantity = 2;
         break;
     case 3:
-        return quantity = 1;
+        quantity = 1;
         break;
     case 4:
-        return quantity = 1;
+        quantity = 1;
         break;
     case 5:
-        return quantity = 1;
+        quantity = 1;
         break;
     default:
-        return quantity = 0;
+        quantity = 0;
         break;
     }
+}
+
+void Boats::setType(string type) { // colocando o tipo para poder usar lista encadeada e localizar onde exatamente está cada barco
+    if (type == "submarine") {
+        this->type = type;
+        setLength(type);
+    }
+    else if (type == "tug ship") {
+        this->type = type;
+        setLength(type);
+    }
+
+    else if (type == "destroyer") {
+        this->type = type;
+        setLength(type);
+    }
+
+    else if (type == "cruiser") {
+        this->type = type;
+        setLength(type);
+    }
+
+    else if (type == "aircraft carrier") {
+        this->type = type;
+        setLength(type);
+    }
+    else {this->type = "NULL"; }
 }
 
 
 Boats::~Boats()
 {
-    //dtor
+    quantity;
+    length;
+    type;
 }
 
+  

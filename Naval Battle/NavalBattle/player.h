@@ -1,16 +1,15 @@
 #include <string>
+#include "Boats.h"
 #pragma once
 #ifndef PLAYER_H
 #define PLAYER_H
 
 using namespace std;
 
-
-
 void matrix(int layer);
 void playerBoard(int layer);
-char randomOrNot(int layer);
-//void SetPlayer(int layer);
+char randomOrNot(int layer, Boats* boats[]);
+void SetPlayer(int layer, Boats boats[]);
 unsigned int randomValues();
 void lockBoat(int layer);
 void game(unsigned int r);
