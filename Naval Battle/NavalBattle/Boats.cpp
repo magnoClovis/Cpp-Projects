@@ -2,10 +2,39 @@
 #include <string>
 #include <iostream>
 using namespace std;
-Boats::Boats()
+
+Boats::Boats() {
+
+}
+
+Boats::Boats(std::string type)
 {
-    length = 0;
-    quantity = 0;
+    this->count_quantity = 0;
+    this->count_len = 0;
+    this->type = type;
+    length = setLength(type);
+    quantity = setQtt(length);
+    address = new int** [2]; 
+
+    for (int i = 0; i < 2; i++) {                             
+        address[i] = new int* [quantity];
+        for (int j = 0; j < quantity; j++) {
+            address[i][j] = new int[length];
+        }
+    }
+    /*
+     address[2][length][quantity] -- layer 0 for rows, layer 1 for columns
+     [0][0][0] - [0][0][1] - [0][0][2]  .... rows infos
+     [1][0][0] - [1][0][1] - [1][0][2]  .... columns infos
+     Both cases above represent infos from one single boat. The middle param (length) is what defines if we're 
+     getting the info from one single boat or from different boats. This only aplies when there can be more than one boat
+     of same type as it happens with subarines (each player has 3 submarines) and tug ships (2 each).
+     At the end, when there's only one boat of a kind, the last param (quantity) will always be zero,
+     which means that there's only one boat of that specific kind.
+
+     Now, it is necessary a method to fill the 3D arrays generated for each boat with the adress of each position of the boats.
+    */
+
 } 
 
 int Boats::getLength() {
@@ -15,6 +44,42 @@ int Boats::getLength() {
 int Boats::getQtt() {
     return this->quantity;
 }
+
+void Boats::setAddress(int row, int column)
+{
+    // tentar aplicar vectors
+    //rows
+    address[0][count_quantity][count_len] = row;
+
+    //columns
+    address[1][count_quantity][count_len] = column;
+    count_len++;
+
+    if (count_len == length) {
+        count_quantity++;
+        count_len = 0;
+    }
+
+}
+
+void Boats::getAddress()
+{
+   //só funciona pro submarino 
+    int k = 0; 
+    for (int j = 0; j < length; j++) {
+        for (k; k < quantity; k++) {
+            std::cout << std::endl << type << " " << k + 1 << std::endl;
+            for (int i = 0; i < 2; i++) {
+                std::cout << address[i][k][j];
+                if (i == 0) {
+                    std::cout << "-";
+                }
+            } if (length > 1) { std::cout << "  |  "; }
+        } std::cout << std::endl;
+    }
+}
+
+
 
 string Boats::getType() {
     return this->type;
@@ -29,53 +94,42 @@ Each boat have different sizes.
 Here it is decided the size of each boat according to the name informed as a parameter
 */
 
-void Boats::setLength(string type) {
+int Boats::setLength(string type) {
     if (type == "submarine") {
-        length = 1;
-        setQtt(length);
+        return 1;
     }
     else if (type == "tug ship") {
-        length = 2;
-        setQtt(length);
+        return 2;
     }
 
     else if (type == "destroyer") {
-        length = 3;
-        setQtt(length);
+        return 3;
     }
 
     else if (type == "cruiser") {
-        length = 4;
-        setQtt(length);
+        return 4;
     }
 
     else if (type == "aircraft carrier") {
-        length = 5;
-        setQtt(length);
+        return 5;
     }
-    else { length = 0; }
+    else { return 0; }
 }
 
-void Boats::setQtt(int length) {
+int Boats::setQtt(int length) {
     switch (length) {
     case 1:
-        quantity = 3;
-        break;
+        return 3;
     case 2:
-        quantity = 2;
-        break;
+        return 2;
     case 3:
-        quantity = 1;
-        break;
+        return 1;
     case 4:
-        quantity = 1;
-        break;
+        return 1;
     case 5:
-        quantity = 1;
-        break;
+        return 1;
     default:
-        quantity = 0;
-        break;
+        return 0;
     }
 }
 

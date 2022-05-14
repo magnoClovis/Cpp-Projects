@@ -87,9 +87,9 @@ int computerRepeat(int* column, int* row, int layer, int axis, int* repeated, in
             }
         }
 
-        else if (*fit == 0) { // if the condition below is false, it means the value informed either greater than 9, then this block of code runs
+        else if (*fit == 0) { // if the condition above is false, it means the value informed is greater than 9, then this block of code runs
             *fit = 1; // the variable fit is set to 1, indicating the value is greater then the maximum allowed
-            *column += (square - 1); // samething done in the lines above
+            *column += (square - 1); // same thing done in the lines above
         }
 
 
@@ -108,7 +108,7 @@ int computerRepeat(int* column, int* row, int layer, int axis, int* repeated, in
                 return *repeated;
             }
 
-            if (*repeated == 1) {// if up there we find another repetition of positions, then the boat can't be placed in de space it was suposed to be..
+            if (*repeated == 1) {// if up there we find another repetition of positions, then the boat can't be placed in the space it was suposed to be..
                 *repeated = 2; //... so the value of repeated is set to 2 ...
                 return *repeated; //... then it's returned, when the functions returns 2, all the board is reseted and new attempt to set all the boats will be made
             }
@@ -172,7 +172,7 @@ int computerRepeat(int* column, int* row, int layer, int axis, int* repeated, in
     }
 }
 
-int setRandomBoard(int layer, Boats boats[]) // set each boat in the board
+int setRandomBoard(int layer, vector<Boats> boats) // set each boat in the board
 {
     int i, j, column, row, axis, quantity, length, repeated, fit;
     int* pcolumn = &column, * prow = &row, * prepeated = &repeated, * pfit = &fit; // pointers so the value of these variables can be changed and used in more than one function
@@ -190,7 +190,7 @@ int setRandomBoard(int layer, Boats boats[]) // set each boat in the board
                 if (i == 0) { /// if its the first iteration, then.....
                     computerPositions(pcolumn, prow, -1); // generates random values for row and column
                     computerRepeat(pcolumn, prow, layer, axis, prepeated, i, pfit); // checks for repetitions and sets the boats on the boeard if everything is correct
-                    //cPlayerBoard(1); // shows the board (only used while programming to check if everything is fine, during the game this function is not called)
+                    //cPlayerBoard(1); // shows the board (only used while programming to check if everything is fine, during the game this function wont be called)
                     if (repeated == 2) {
                         return repeated;
                     }
@@ -263,19 +263,19 @@ int attackPC(int* hit_or_miss)
     return win;
 }
 
-void randomSet(int layer, Boats* boats[])
+void randomSet(int layer, vector<Boats> boats)
 {
     int set_computer, i;
     i = 0;
     matrix(layer);
-    for (i; i < 5; i++) {
-        lockBoat(layer); // lock the boats as explained before
-        set_computer = setRandomBoard(layer, *boats); // setting the different boats on the board, by using the values on the 'types' array, the objects are created and each one has its characterists of length and quantity
-        if (set_computer == 2) {
-            i = -1;
-            matrix(layer);
-        }//cPlayerBoard(layer);
-    } lockBoat(layer); //cPlayerBoard(layer);
+    
+    lockBoat(layer); // lock the boats as explained before
+    set_computer = setRandomBoard(layer, boats); // setting the different boats on the board, by using the values on the 'types' array, the objects are created and each one has its characterists of length and quantity
+    if (set_computer == 2) {
+        i = -1;
+        matrix(layer);
+    }//cPlayerBoard(layer);
+     lockBoat(layer); //cPlayerBoard(layer);
 }
 
 void computerGame() {

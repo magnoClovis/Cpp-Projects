@@ -1,4 +1,5 @@
 #include <string>
+#include <vector>
 #include "Boats.h"
 #pragma once
 #ifndef PLAYER_H
@@ -8,8 +9,8 @@ using namespace std;
 
 void matrix(int layer);
 void playerBoard(int layer);
-char randomOrNot(int layer, Boats* boats[]);
-void SetPlayer(int layer, Boats boats[]);
+char randomOrNot(int layer, vector<Boats> boats);
+void SetPlayer(int layer, vector<Boats> boats);
 unsigned int randomValues();
 void lockBoat(int layer);
 void game(unsigned int r);

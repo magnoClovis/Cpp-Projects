@@ -9,7 +9,7 @@
 using namespace std;
 
 
-void randomSet(int layer, Boats* boats[]);
+void randomSet(int layer, vector<Boats> boats);
 void computerGame();
 #endif
 

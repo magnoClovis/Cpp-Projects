@@ -2,6 +2,7 @@
 #include <string>
 #include <random>
 #include <time.h>
+#include <vector>
 
 #include "variables.h"
 #include "player.h"
@@ -233,7 +234,7 @@ void clearBoard(int column, int row, int layer) { // This function is responsibl
     }
 }
 
-void setBoat(int layer, Boats boat[]) { // Here the boats are set in the board, for that it is used some of the functions above and, in order to help, objects from the 'Boats' class are created
+void setBoat(int layer, Boats boats) { // Here the boats are set in the board, for that it is used some of the functions above and, in order to help, objects from the 'Boats' class are created
     int i, j, column, row, quantity, length;
     int* pcolumn = &column, * prow = &row; // pointers so the value of these variables can be changed and used in more than one function
     bool repeated, horiz, vert; // bools for checking continuity and repetition of choosen squares while the player is setting the boats on the board
@@ -244,14 +245,14 @@ void setBoat(int layer, Boats boat[]) { // Here the boats are set in the board, 
     j = 0;
     horiz = 0, vert = 0, repeated = 1; // 0 for false and 1 for true
     for (int z = 0; z < 5; z++) {
-        quantity = boat[z].getQtt(); // savig the quantity of boats in a variable
-        length = boat[z].getLength();// saving the lenght of the boats in another variable
+        quantity = boats.getQtt(); // savig the quantity of boats in a variable
+        length = boats.getLength();// saving the lenght of the boats in another variable
  
         while (j < quantity) { // this first while loop stands for setting the correct quantity of each boat on the board
             for (i = 0; i < length; i++) { // this for loop is used for setting the correct amount of spaces that each boat has
 
-                cout << "Total of " << boat[i].getType() << " on the board: " << j << endl << endl;
-                cout << boat[i].getType() << ": You have " << quantity << " " << boat[i].getType() << "! Each " << boat[i].getType() << " occupies " << length << " squares on the board.\n";
+                cout << "Total of " << boats.getType() << " on the board: " << j << endl << endl;
+                cout << boats.getType() << ": You have " << quantity << " " << boats.getType() << "! Each " << boats.getType() << " occupies " << length << " squares on the board.\n";
                 positions(pcolumn, prow); // gets the choosen space from the player
                 if (i == 0) { /// if its the first iteration, then.....
                     repeated = repeat(pcolumn, prow, layer); // checks only for repetition of spaces, no need to check continuity in the first iteration
@@ -335,7 +336,7 @@ char chooseOpponent() {
     }
 }
 
-void SetPlayer(int layer, Boats* boats[]) // This functions stands for letting both players set all the boats on the board
+void SetPlayer(int layer, vector<Boats> boats) // This functions stands for letting both players set all the boats on the board
 {
     cout << "Player " << layer + 1 << ", please follow the instructions to set the position for each boat." << endl;
 
@@ -524,7 +525,7 @@ int playerTwoAttack(int layer, int* attack) { // fuctions played when player two
     return win;
 }
 
-char randomOrNot(int layer, Boats* boats[]) {
+char randomOrNot(int layer, vector<Boats> boats) {
     int option, verif;
     char against;
     cout << "How do you want to enter the positions for the boat?" << endl << "1. Manually" << endl << "2. Randomly" << endl;

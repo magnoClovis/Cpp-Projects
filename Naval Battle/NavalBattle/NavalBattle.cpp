@@ -7,6 +7,7 @@
 #include <conio.h>
 #include <windows.h>
 #include <math.h>
+#include <vector>
 
 #include "variables.h"
 #include "boats.h"
@@ -19,10 +20,8 @@ char g_set_boat = 'S';
 char g_boat = 'O';
 char g_water = '.';
 char g_fire = 'X';
-
-
 using namespace std;
-void foo(Boats* boats[]) {
+/*void foo(Boats* boats[]) {
     for (int i = 0; i < 5; i++)
     {
         cout << "TYPE  " << boats[i]->getType() << endl;
@@ -32,36 +31,32 @@ void foo(Boats* boats[]) {
 
     boats[4]->setType("submarine");
 
-}
+}*/
 
 int main()
 {
-    Boats submarine, tug_ship, destroyer, cruiser, aircraft;
-    Boats *psubmarine, *ptug_ship, *pdestroyer, *pcruiser, *paircraft;
-    psubmarine = &submarine;
-    ptug_ship = &tug_ship;
-    pdestroyer = &destroyer;
-    pcruiser = &cruiser;
-    paircraft = &aircraft;
+    std::string types[5] = { "submarine", "tug ship", "destroyer", "cruiser", "aircraft carrier" };
 
-    submarine.setType("submarine");
-    tug_ship.setType("tug ship");
-    destroyer.setType("destroyer");
-    cruiser.setType("cruiser");
-    aircraft.setType("aircraft carrier");
+    vector<Boats> boats;
 
-    Boats* boats[5];
-    boats[0] = psubmarine;
-    boats[1] = ptug_ship;
-    boats[2] = pdestroyer;
-    boats[3] = pcruiser;
-    boats[4] = paircraft;
+    for (int i = 0; i < 5; i++) {
+        boats.push_back(Boats(types[i])); // filling a vector with boats objects, this way the characteristis of each boat dont get lost during the execution of the program
+    }
+
+    boats[0].setAddress(0, 1);
+    boats[0].setAddress(5, 7);
+    boats[0].setAddress(4, 8);
+
+    boats[1].setAddress(0, 0);
+    boats[1].setAddress(5, 9);
+    boats[1].setAddress(3, 2);
+    boats[1].setAddress(7, 6);
+
+    boats[0].getAddress();
     
-    /*foo(boats);
-    cout << "TYPE  " << boats[4]->getType() << endl;
-    cout << "LENGTH  " << boats[4]->getLength() << endl;
-    cout << "QUANTITY  " << boats[4]->getQtt() << endl << endl << endl;*/
+    boats[1].getAddress();
 
+    /*
     srand(time(0));
     char against; // agains a person or the computer
     matrix(2); // starting a 3D matrix full of zeros
@@ -78,6 +73,35 @@ int main()
         randomSet(1, boats);
         computerGame();
     }
-    
+    */
     return 0;
 }
+
+
+/*
+    int*** cu = new int**[2];
+    for (int i = 0; i < 2; i++) {
+        cu[i] = new int*[3];
+        for (int j = 0; j < 3; j++) {
+            cu[i][j] = new int[1];
+        }
+    }
+
+    int l = 10;
+    for (int i = 0; i < 2; i++) {
+        for (int j = 0; j < 3; j++) {
+            for (int k = 0; k < 1; k++) {
+                cu[i][j][k] = ++l;
+            }
+        }
+    }
+
+
+    for (int i = 0; i < 2; i++) {
+        for (int j = 0; j < 3; j++) {
+            for (int k = 0; k < 1; k++) {
+                std::cout << cu[i][j][k] << " ";
+            } std::cout << std::endl;
+        }std::cout << std::endl << std::endl;
+    }
+*/
