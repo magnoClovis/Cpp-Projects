@@ -15,7 +15,7 @@ public:
     string getType();
     int getQtt();
     void setAddress(int row, int column);
-    void getAddress();
+    void showAddress();
     
 private:
     int length; int quantity; int*** address; int count_quantity; int count_len;

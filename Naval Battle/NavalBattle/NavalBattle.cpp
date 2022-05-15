@@ -52,9 +52,18 @@ int main()
     boats[1].setAddress(3, 2);
     boats[1].setAddress(7, 6);
 
-    boats[0].getAddress();
+    boats[4].setAddress(1, 2);
+    boats[4].setAddress(3, 4);
+    boats[4].setAddress(5, 6);
+    boats[4].setAddress(7, 8);
+    boats[4].setAddress(9, 0);
+
+    boats[0].showAddress();
     
-    boats[1].getAddress();
+    boats[1].showAddress();
+
+    boats[4].showAddress();
+    
 
     /*
     srand(time(0));

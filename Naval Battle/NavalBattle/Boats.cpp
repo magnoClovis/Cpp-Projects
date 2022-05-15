@@ -62,19 +62,18 @@ void Boats::setAddress(int row, int column)
 
 }
 
-void Boats::getAddress()
+void Boats::showAddress()
 {
    //só funciona pro submarino 
-    int k = 0; 
-    for (int j = 0; j < length; j++) {
-        for (k; k < quantity; k++) {
-            std::cout << std::endl << type << " " << k + 1 << std::endl;
+    for (int j = 0; j < quantity; j++) {
+        std::cout << std::endl << type << " " << j + 1 << std::endl;
+        for (int k = 0; k < length; k++) {
             for (int i = 0; i < 2; i++) {
-                std::cout << address[i][k][j];
+                std::cout << address[i][j][k];
                 if (i == 0) {
                     std::cout << "-";
                 }
-            } if (length > 1) { std::cout << "  |  "; }
+            } if (k != length-1) { std::cout << "  |  "; }
         } std::cout << std::endl;
     }
 }
