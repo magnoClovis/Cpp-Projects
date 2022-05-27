@@ -22,6 +22,7 @@ Boats::Boats(std::string type)
             address[i][j] = new int[length];
         }
     }
+
     /*
      address[2][length][quantity] -- layer 0 for rows, layer 1 for columns
      [0][0][0] - [0][0][1] - [0][0][2]  .... rows infos
@@ -49,22 +50,24 @@ void Boats::setAddress(int row, int column)
 {
     // tentar aplicar vectors
     //rows
+
     address[0][count_quantity][count_len] = row;
 
     //columns
     address[1][count_quantity][count_len] = column;
-    count_len++;
-
-    if (count_len == length) {
-        count_quantity++;
-        count_len = 0;
-    }
-
+        
 }
 
-void Boats::showAddress()
+void Boats::setCountQtt(int count_quantity) {
+    this->count_quantity = count_quantity;
+}
+
+void Boats::setCountLen(int count_len)
 {
-   //só funciona pro submarino 
+    this->count_len = count_len;
+}
+
+void Boats::showAddress() {
     for (int j = 0; j < quantity; j++) {
         std::cout << std::endl << type << " " << j + 1 << std::endl;
         for (int k = 0; k < length; k++) {
@@ -73,11 +76,10 @@ void Boats::showAddress()
                 if (i == 0) {
                     std::cout << "-";
                 }
-            } if (k != length-1) { std::cout << "  |  "; }
+            } if (k != length - 1) { std::cout << "  |  "; }
         } std::cout << std::endl;
     }
 }
-
 
 
 string Boats::getType() {
@@ -162,9 +164,9 @@ void Boats::setType(string type) { // colocando o tipo para poder usar lista enc
 
 Boats::~Boats()
 {
-    quantity;
-    length;
-    type;
+    //quantity;
+    //length;
+    //type;
 }
 
   

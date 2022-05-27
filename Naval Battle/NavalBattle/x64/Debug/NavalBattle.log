@@ -1,7 +1,2 @@
-﻿  Boats.cpp
-  NavalBattle.cpp
-  computer_game.cpp
-  player.cpp
-  Generando código...
-D:\clovi\Estudos\Repositórios\Cpp-Projects\Naval Battle\NavalBattle\computer_game.cpp(173): warning C4715: 'computerRepeat': no todas las rutas de acceso de control devuelven un valor
+﻿  player.cpp
   NavalBattle.vcxproj -> D:\clovi\Estudos\Repositórios\Cpp-Projects\Naval Battle\NavalBattle\x64\Debug\NavalBattle.exe

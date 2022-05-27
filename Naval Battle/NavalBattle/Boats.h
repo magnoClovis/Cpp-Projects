@@ -16,6 +16,8 @@ public:
     int getQtt();
     void setAddress(int row, int column);
     void showAddress();
+    void setCountQtt(int count_quantity);
+    void setCountLen(int count_len);
     
 private:
     int length; int quantity; int*** address; int count_quantity; int count_len;

@@ -13,7 +13,7 @@
 
 using namespace std;
 
-int computerBoard(int column, int row, int layer)
+int computerBoard(int column, int row, int layer, Boats boat)
 {
     // This function changes an element on the matrix "g_squares" and shows what the changes did on the table
     if (g_squares[row][column][layer] == g_set_boat)
@@ -21,6 +21,7 @@ int computerBoard(int column, int row, int layer)
         return 1;
     }
     g_squares[row][column][layer] = g_set_boat;
+    boat.setAddress(row, column);
     return 0;
 }
 
@@ -66,7 +67,7 @@ void cPlayerBoard(int layer) // This function is just used for testing the gener
     }
 }
 
-int computerRepeat(int* column, int* row, int layer, int axis, int* repeated, int square, int* fit) { // This function checks if the positions chosed randomly are valid or not.
+int computerRepeat(int* column, int* row, int layer, int axis, int* repeated, int square, int* fit, Boats boat) { // This function checks if the positions chosed randomly are valid or not.
                                                                                                      // This function also choose the next postions for the boat after the first one is choosed, after it,
                                                                                                     // it checks if this square is valid or not before setting it on the board.
     if (axis == 0) { // if horizontal, then....
@@ -81,7 +82,7 @@ int computerRepeat(int* column, int* row, int layer, int axis, int* repeated, in
                 *column += (square - 1);
                 break;
             default: // if the value at the square isn't either 83 or 79, then the position is free to use 
-                computerBoard(*column + square, *row, layer); // calls the function responsible for setting the boats on the board
+                computerBoard(*column + square, *row, layer, boat); // calls the function responsible for setting the boats on the board
                 *repeated = 0; // the position is obviously not repeated
                 return *repeated; // returns
             }
@@ -103,7 +104,7 @@ int computerRepeat(int* column, int* row, int layer, int axis, int* repeated, in
                 *repeated = 1;
                 break;
             default:
-                computerBoard(*column - square, *row, layer);
+                computerBoard(*column - square, *row, layer, boat);
                 *repeated = 1;
                 return *repeated;
             }
@@ -133,7 +134,7 @@ int computerRepeat(int* column, int* row, int layer, int axis, int* repeated, in
                 *row += (square - 1);
                 break;
             default:
-                computerBoard(*column, *row + square, layer);
+                computerBoard(*column, *row + square, layer, boat);
                 *repeated = 0;
                 return *repeated;
             }
@@ -154,7 +155,7 @@ int computerRepeat(int* column, int* row, int layer, int axis, int* repeated, in
                 *repeated = 1;
                 break;
             default:
-                computerBoard(*column, *row - square, layer);
+                computerBoard(*column, *row - square, layer, boat);
                 *repeated = 1;
                 return *repeated;
             }
@@ -178,7 +179,7 @@ int setRandomBoard(int layer, vector<Boats> boats) // set each boat in the board
     int* pcolumn = &column, * prow = &row, * prepeated = &repeated, * pfit = &fit; // pointers so the value of these variables can be changed and used in more than one function
 
     axis = randomValues() % 2; // axis = 0, horizontal  ######   axis = 1, vertical
-    for (int z = 0; z < 5; z++) {
+    for (int z = 0; z < boats.size(); z++) {
         quantity = boats[z].getQtt(); // savig the quantity of boats in a variable
         length = boats[z].getLength(); // saving the lenght of the boats in another variable
 
@@ -189,14 +190,18 @@ int setRandomBoard(int layer, vector<Boats> boats) // set each boat in the board
             for (i = 0; i < length; i++) { // this for loop is used for setting the correct amount of spaces that each boat has
                 if (i == 0) { /// if its the first iteration, then.....
                     computerPositions(pcolumn, prow, -1); // generates random values for row and column
-                    computerRepeat(pcolumn, prow, layer, axis, prepeated, i, pfit); // checks for repetitions and sets the boats on the boeard if everything is correct
+                    boats[z].setCountQtt(j);
+                    boats[z].setCountLen(i);
+                    computerRepeat(pcolumn, prow, layer, axis, prepeated, i, pfit, boats[z]); // checks for repetitions and sets the boats on the boeard if everything is correct
                     //cPlayerBoard(1); // shows the board (only used while programming to check if everything is fine, during the game this function wont be called)
                     if (repeated == 2) {
                         return repeated;
                     }
                 }
                 else {
-                    computerRepeat(pcolumn, prow, layer, axis, prepeated, i, pfit);
+                    boats[z].setCountQtt(j);
+                    boats[z].setCountLen(i);
+                    computerRepeat(pcolumn, prow, layer, axis, prepeated, i, pfit, boats[z]);
                     //cPlayerBoard(1);
                     if (repeated == 2) {
                         return repeated;
@@ -271,9 +276,10 @@ void randomSet(int layer, vector<Boats> boats)
     
     lockBoat(layer); // lock the boats as explained before
     set_computer = setRandomBoard(layer, boats); // setting the different boats on the board, by using the values on the 'types' array, the objects are created and each one has its characterists of length and quantity
-    if (set_computer == 2) {
+    while (set_computer == 2) {
         i = -1;
         matrix(layer);
+        set_computer = setRandomBoard(layer, boats);
     }//cPlayerBoard(layer);
      lockBoat(layer); //cPlayerBoard(layer);
 }
