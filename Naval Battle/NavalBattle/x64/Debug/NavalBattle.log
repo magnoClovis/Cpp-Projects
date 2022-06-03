@@ -1,2 +1,3 @@
-﻿  player.cpp
+﻿  NavalBattle.cpp
+D:\clovi\Estudos\Repositórios\Cpp-Projects\Naval Battle\NavalBattle\NavalBattle.cpp(36,15): warning C4244: 'argumento': conversión de 'time_t' a 'unsigned int'; posible pérdida de datos
   NavalBattle.vcxproj -> D:\clovi\Estudos\Repositórios\Cpp-Projects\Naval Battle\NavalBattle\x64\Debug\NavalBattle.exe

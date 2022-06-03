@@ -656,3 +656,19 @@ void game(unsigned int r) // this function is where the game starts after the pl
         }
     }
 }  
+
+void showingAddresses(vector<Boats> boats) {
+    for (int i = 0; i < boats.size(); i++) {
+        boats[i].showAddress();
+        std::cout << std::endl << std::endl;
+    }
+}
+
+void attacking(vector<Boats> boats, int row, int column) {
+    // instead of checking the whole board for a boat at a specific location, it is better to check directly the boats
+    // addresses using the class and tell wether there's a boat or not at the choosen location 
+
+    for (int i = 0; i < boats.size(); i++) {
+        //boats[i].
+    }
+}

@@ -18,4 +18,5 @@ void gameBoard(int layer);
 int playerOneAttack(int layer, int* attack, int computer);
 int winner(int layer);
 void gameOver(int layer);
+void showingAddresses(vector<Boats> boats);
 #endif

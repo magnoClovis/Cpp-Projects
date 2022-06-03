@@ -34,60 +34,26 @@ int main()
     }
     
     srand(time(0));
-    char against; // agains a person or the computer
+    char against; // against a person or the computer
     matrix(2); // starting a 3D matrix full of zeros
     playerBoard(0); // shows the player one's board on the screen 
     against = randomOrNot(0, p1_boats);
 
-    for (int i = 0; i < p1_boats.size(); i++) {
-        p1_boats[i].showAddress();
-        std::cout << std::endl << std::endl;
-    }
-
+    p1_boats[0].getAdress(p1_boats[0].address[0][0][0], p1_boats[0].address[1][0][0]);
+    showingAddresses(p1_boats);
     system("pause");
     if (against == 'A' || against == 'a') { // if playing agains a person, then...
         playerBoard(1); // shows the player two's board on the screen
         randomOrNot(1, p2_boats); // set the position of the player two's boats on the board
-
-        for (int i = 0; i < p2_boats.size(); i++) {
-            p2_boats[i].showAddress();
-            std::cout << std::endl << std::endl;
-        }
-        system("cls");
-
-        std::cout << "------------------------\n\n";
-        for (int i = 0; i < p1_boats.size(); i++) {
-            p1_boats[i].showAddress();
-            std::cout << std::endl << std::endl;
-        }
-
-        for (int i = 0; i < p2_boats.size(); i++) {
-            p2_boats[i].showAddress();
-            std::cout << std::endl << std::endl;
-        }
-        system("pause");
-
-
-        //game(randomValues() % 2); // start the game and decides who goes first
+        game(randomValues() % 2); // start the game and decides who goes first
         return 0;
     }
     else if (against == 'B' || against == 'b') {
         cout << "----------------------------GENERATING POSITIONS FOR THE COMPUTER----------------------------\n\n";
         randomSet(1, p2_boats);
-        //computerGame();
+        computerGame();
     }
 
-    std::cout << "------------------------\n\n";
-    for (int i = 0; i < p1_boats.size(); i++) {
-        p1_boats[i].showAddress();
-        std::cout << std::endl << std::endl;
-    }
-    std::cout << "------------------------\n\n";
-    for (int i = 0; i < p2_boats.size(); i++) {
-        p2_boats[i].showAddress();
-        std::cout << std::endl << std::endl;
-    }
-    system("pause");
 
     return 0;
 }

@@ -27,13 +27,13 @@ Boats::Boats(std::string type)
      address[2][length][quantity] -- layer 0 for rows, layer 1 for columns
      [0][0][0] - [0][0][1] - [0][0][2]  .... rows infos
      [1][0][0] - [1][0][1] - [1][0][2]  .... columns infos
+
      Both cases above represent infos from one single boat. The middle param (length) is what defines if we're 
      getting the info from one single boat or from different boats. This only aplies when there can be more than one boat
      of same type as it happens with subarines (each player has 3 submarines) and tug ships (2 each).
      At the end, when there's only one boat of a kind, the last param (quantity) will always be zero,
      which means that there's only one boat of that specific kind.
 
-     Now, it is necessary a method to fill the 3D arrays generated for each boat with the adress of each position of the boats.
     */
 
 } 
@@ -66,6 +66,22 @@ void Boats::setCountLen(int count_len)
 {
     this->count_len = count_len;
 }
+
+bool Boats::getAdress(int row, int column)
+{
+    for (int j = 0; j < quantity; j++) {
+        for (int k = 0; k < length; k++) {
+            if (address[0][j][k] == row && address[1][j][k] == column) {
+                std::cout << "HEREEE\n" << address[0][j][k] << " - " << address[1][j][k] << std::endl;
+                // agora preciso de algo para ir marcando quais posições foram encontradas...
+                // caso o código entre nesse if, poderia alterar alguma variável que registre algo de cada barco
+                return true;
+            }
+        } std::cout << std::endl;
+    } 
+    return false;
+}
+
 
 void Boats::showAddress() {
     for (int j = 0; j < quantity; j++) {

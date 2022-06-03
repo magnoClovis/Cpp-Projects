@@ -10,6 +10,7 @@ public:
     Boats();
     Boats(std::string type);
     virtual ~Boats();
+    int*** address;
     void boats(string type);
     int getLength();
     string getType();
@@ -18,9 +19,10 @@ public:
     void showAddress();
     void setCountQtt(int count_quantity);
     void setCountLen(int count_len);
+    bool getAdress(int row, int column);
     
 private:
-    int length; int quantity; int*** address; int count_quantity; int count_len;
+    int length; int quantity;  int count_quantity; int count_len;
     string type;
     void setType(string type);
     int setLength(string type);
