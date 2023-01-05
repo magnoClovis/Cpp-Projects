@@ -192,7 +192,7 @@ int setRandomBoard(int layer, vector<Boats> boats) // set each boat in the board
                     computerPositions(pcolumn, prow, -1); // generates random values for row and column
                     boats[z].setCountQtt(j);
                     boats[z].setCountLen(i);
-                    computerRepeat(pcolumn, prow, layer, axis, prepeated, i, pfit, boats[z]); // checks for repetitions and sets the boats on the boeard if everything is correct
+                    computerRepeat(pcolumn, prow, layer, axis, prepeated, i, pfit, boats[z]); // checks for repetitions and sets the boats on the board if everything is correct
                     //cPlayerBoard(1); // shows the board (only used while programming to check if everything is fine, during the game this function wont be called)
                     if (repeated == 2) {
                         return repeated;
